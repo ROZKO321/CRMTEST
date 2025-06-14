@@ -1,110 +1,183 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const role = localStorage.getItem("role");
-  if (role !== "admin") {
-    document.body.innerHTML = "<p>Access Denied.</p>";
-    return;
+  const clientsTable = document.getElementById("clients-table");
+  const uploadInput = document.getElementById("upload-csv");
+  const exportBtn = document.getElementById("export-csv");
+  const addClientBtn = document.getElementById("add-client-btn");
+  const addManagerBtn = document.getElementById("add-manager-btn");
+  const logsContainer = document.getElementById("logs");
+  const currentRole = localStorage.getItem("role");
+
+  if (currentRole !== "admin") {
+    location.href = "index.html";
   }
 
-  loadLogs();
-});
+  // Клиенты из localStorage
+  let clients = JSON.parse(localStorage.getItem("crmClients") || "[]");
+  let logs = JSON.parse(localStorage.getItem("crmLogs") || "[]");
+  let managers = JSON.parse(localStorage.getItem("crmManagers") || "[]");
 
-function importCSV() {
-  const fileInput = document.getElementById("importFile");
-  const file = fileInput.files[0];
-  if (!file) return;
+  function saveClients() {
+    localStorage.setItem("crmClients", JSON.stringify(clients));
+  }
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const lines = e.target.result.split("\n").filter(Boolean);
-    const leads = JSON.parse(localStorage.getItem("leads")) || [];
+  function saveLogs(message) {
+    const entry = {
+      message,
+      time: new Date().toLocaleString()
+    };
+    logs.unshift(entry);
+    localStorage.setItem("crmLogs", JSON.stringify(logs));
+    renderLogs();
+  }
 
-    lines.forEach(line => {
-      const [firstName, lastName, phone, email, country, affiliate] = line.split(",");
-      leads.push({
-        id: crypto.randomUUID(),
-        firstName, lastName, phone, email, country, affiliate,
-        manager: "", status: "New", uploadDate: new Date().toLocaleDateString()
-      });
+  function renderClients() {
+    clientsTable.innerHTML = `
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Country</th>
+        <th>Affiliate</th>
+        <th>Status</th>
+        <th>Manager</th>
+        <th>Actions</th>
+      </tr>
+    `;
+    clients.forEach((client, index) => {
+      clientsTable.innerHTML += `
+        <tr>
+          <td>${client.id}</td>
+          <td>${client.name}</td>
+          <td>${client.surname}</td>
+          <td>${client.email}</td>
+          <td>${client.phone}</td>
+          <td>${client.country}</td>
+          <td>${client.affiliate}</td>
+          <td>${client.status}</td>
+          <td>
+            <select onchange="assignManager(${client.id}, this.value)">
+              <option value="">None</option>
+              ${managers.map(mgr => `
+                <option value="${mgr.name}" ${mgr.name === client.manager ? "selected" : ""}>
+                  ${mgr.name}
+                </option>`).join("")}
+            </select>
+          </td>
+          <td><button onclick="deleteClient(${client.id})">🗑️</button></td>
+        </tr>
+      `;
     });
-
-    localStorage.setItem("leads", JSON.stringify(leads));
-    log(`Imported ${lines.length} leads`);
-    alert("Leads imported");
-  };
-  reader.readAsText(file);
-}
-
-function exportCSV() {
-  const leads = JSON.parse(localStorage.getItem("leads")) || [];
-  const csv = leads.map(l =>
-    [l.firstName, l.lastName, l.phone, l.email, l.country, l.affiliate].join(",")
-  ).join("\n");
-
-  const blob = new Blob([csv], { type: "text/csv" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "leads.csv";
-  link.click();
-
-  log(`Exported ${leads.length} leads`);
-}
-
-function addClient() {
-  const get = id => document.getElementById(id).value.trim();
-  const client = {
-    id: crypto.randomUUID(),
-    firstName: get("firstName"),
-    lastName: get("lastName"),
-    phone: get("phone"),
-    email: get("email"),
-    country: get("country"),
-    affiliate: get("affiliate"),
-    status: "New",
-    manager: "",
-    uploadDate: new Date().toLocaleDateString()
-  };
-
-  if (!client.firstName || !client.email) return alert("Missing required fields");
-
-  const leads = JSON.parse(localStorage.getItem("leads")) || [];
-  leads.push(client);
-  localStorage.setItem("leads", JSON.stringify(leads));
-
-  log(`Client ${client.firstName} ${client.lastName} added`);
-  alert("Client added");
-}
-
-function addManager() {
-  const name = document.getElementById("managerName").value.trim();
-  if (!name) return;
-  const managers = JSON.parse(localStorage.getItem("managers")) || [];
-  if (!managers.includes(name)) {
-    managers.push(name);
-    localStorage.setItem("managers", JSON.stringify(managers));
-    log(`Manager ${name} added`);
-    alert("Manager added");
   }
-}
 
-function removeManager() {
-  const name = document.getElementById("managerName").value.trim();
-  if (!name) return;
-  let managers = JSON.parse(localStorage.getItem("managers")) || [];
-  managers = managers.filter(m => m !== name);
-  localStorage.setItem("managers", JSON.stringify(managers));
-  log(`Manager ${name} removed`);
-  alert("Manager removed");
-}
+  window.assignManager = function(id, managerName) {
+    const client = clients.find(c => c.id === id);
+    if (client) {
+      client.manager = managerName;
+      saveClients();
+      saveLogs(`Assigned manager "${managerName}" to client ID ${id}`);
+    }
+  };
 
-function log(text) {
-  const logs = JSON.parse(localStorage.getItem("logs")) || [];
-  logs.push(`[${new Date().toLocaleString()}] ${text}`);
-  localStorage.setItem("logs", JSON.stringify(logs));
-  loadLogs();
-}
+  window.deleteClient = function(id) {
+    if (confirm("Delete this client?")) {
+      clients = clients.filter(c => c.id !== id);
+      saveClients();
+      saveLogs(`Deleted client with ID ${id}`);
+      renderClients();
+    }
+  };
 
-function loadLogs() {
-  const logBox = document.getElementById("logBox");
-  const logs = JSON.parse(localStorage.getItem("logs")) || [];
-  logBox.textContent = logs.slice().reverse().join("\n");
-}
+  exportBtn.addEventListener("click", () => {
+    const headers = ["id", "name", "surname", "email", "phone", "country", "affiliate", "status", "manager"];
+    const rows = clients.map(c => headers.map(h => `"${c[h] || ""}"`).join(","));
+    const csvContent = [headers.join(","), ...rows].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "clients_export.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+    saveLogs("Exported clients to CSV");
+  });
+
+  uploadInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const lines = event.target.result.split("\n").filter(Boolean);
+      const headers = lines[0].split(",");
+      lines.slice(1).forEach(line => {
+        const values = line.split(",");
+        const client = {};
+        headers.forEach((h, i) => {
+          client[h.trim()] = values[i]?.replace(/"/g, "").trim();
+        });
+        client.id = Date.now() + Math.floor(Math.random() * 1000);
+        client.createdAt = new Date().toISOString();
+        clients.push(client);
+      });
+      saveClients();
+      renderClients();
+      saveLogs(`Imported ${lines.length - 1} clients from CSV`);
+    };
+    reader.readAsText(file);
+  });
+
+  addClientBtn.addEventListener("click", () => {
+    const name = prompt("Enter name:");
+    const surname = prompt("Enter surname:");
+    const email = prompt("Enter email:");
+    const phone = prompt("Enter phone:");
+    const country = prompt("Enter country:");
+    const affiliate = prompt("Enter affiliate:");
+
+    if (name && surname) {
+      const client = {
+        id: Date.now(),
+        name,
+        surname,
+        email,
+        phone,
+        country,
+        affiliate,
+        status: "New",
+        manager: "",
+        createdAt: new Date().toISOString(),
+        comment: ""
+      };
+      clients.push(client);
+      saveClients();
+      renderClients();
+      saveLogs(`Added new client: ${name} ${surname}`);
+    }
+  });
+
+  addManagerBtn.addEventListener("click", () => {
+    const name = prompt("Manager login (ex: mgr1):");
+    if (name && !managers.find(m => m.name === name)) {
+      managers.push({ name });
+      localStorage.setItem("crmManagers", JSON.stringify(managers));
+      renderClients();
+      saveLogs(`Added new manager: ${name}`);
+    } else {
+      alert("Manager already exists or name is invalid.");
+    }
+  });
+
+  function renderLogs() {
+    logsContainer.innerHTML = logs.map(log => `
+      <div class="log-entry">
+        <div>${log.message}</div>
+        <small>${log.time}</small>
+      </div>
+    `).join("");
+  }
+
+  renderClients();
+  renderLogs();
+});
