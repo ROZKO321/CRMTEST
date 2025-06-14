@@ -106,28 +106,24 @@
       <p class="login-error" id="login-error" style="display: none;"></p>
     </div>
   </div>
+ <script>
+  function login() {
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
 
-  <script>
-    function login() {
-      const user = document.getElementById("username").value.trim();
-      const pass = document.getElementById("password").value.trim();
-      const loginError = document.getElementById("login-error");
-
-      if (!user || !pass) {
-        loginError.innerText = "Введите имя пользователя и пароль";
-        loginError.style.display = "block";
-        return;
-      }
-
-      if (user === "admin" && pass === "admin") {
-        localStorage.setItem("role", "admin");
-        window.location.href = "home.html";
-      } else if (user.startsWith("mgr") && pass === "123") {
-        localStorage.setItem("role", "manager");
-        window.location.href = "home.html";
-      } else {
-        loginError.innerText = "Неверный логин или пароль";
-        loginError.style.display = "block";
-      }
+    if (!user || !pass) {
+      alert("Введите логин и пароль");
+      return;
     }
-  </scrip
+
+    if (user === "admin" && pass === "admin") {
+      localStorage.setItem("currentUser", JSON.stringify({ role: "admin", username: user }));
+      window.location.href = "home.html";
+    } else if (user.startsWith("mgr") && pass === "123") {
+      localStorage.setItem("currentUser", JSON.stringify({ role: "manager", username: user }));
+      window.location.href = "home.html";
+    } else {
+      alert("Неверный логин или пароль");
+    }
+  }
+</script>
