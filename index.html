@@ -1,64 +1,27 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CRM Coldi</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare/libs/font-awesome/6.5.0/css/all.min.css" />
+  <title>Coldi CRM — Login</title>
+  <link rel="stylesheet" href="css/login.css" />
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="main-layout">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <img src="img/logo.png" alt="CRM Logo" />
-        <span class="crm-label">CRM</span>
-      </div>
-      <nav>
-        <ul>
-          <li class="nav-item" data-page="home.html"><i class="fas fa-home"></i><span data-i18n="menu.home">Главная</span></li>
-          <li class="nav-item" data-page="leads.html"><i class="fas fa-address-book"></i><span data-i18n="menu.leads">Лиды</span></li>
-          <li class="nav-item" data-page="settings.html"><i class="fas fa-gear"></i><span data-i18n="menu.settings">Настройки</span></li>
-          <li id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span data-i18n="menu.logout">Выход</span></li>
-        </ul>
-      </nav>
-      <div class="sidebar-toggle"><i class="fas fa-bars"></i></div>
-    </aside>
-
-    <!-- Content -->
-    <div class="content">
-      <header class="top-panel">
-        <div class="top-left">
-          <select id="languageToggle">
-            <option value="ru">RU</option>
-            <option value="en">EN</option>
-          </select>
-        </div>
-        <div class="top-right">
-          <div class="notification-wrapper">
-            <span id="bell"><i class="fas fa-bell"></i></span>
-            <div id="reminderBox" class="hidden">
-              <div class="reminder-header" data-i18n="reminder.title">🔔 Напоминания</div>
-              <div id="reminderList"></div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main id="appWrapper">
-        <!-- Загружаемые вкладки -->
-        <div style="padding: 40px; text-align: center;">Загрузка...</div>
-      </main>
+  <div class="login-wrapper">
+    <div class="login-card">
+      <img src="img/logo.svg" alt="Coldi CRM" class="logo" />
+      <h1>Welcome to Coldi CRM</h1>
+      <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Log In</button>
+        <p class="error-msg" id="loginError"></p>
+      </form>
     </div>
   </div>
 
-  <!-- JS подключения -->
-  <script src="js/init.js"></script>
-  <script src="js/sidebar.js"></script>
-  <script src="js/theme.js"></script>
-  <script src="js/audio.js"></script>
-  <script src="js/i18n.js"></script>
-  <script src="js/reminders.js"></script>
+  <script src="js/login.js"></script>
 </body>
 </html>
