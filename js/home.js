@@ -36,3 +36,33 @@ document.addEventListener("DOMContentLoaded", () => {
     phraseEl.textContent = randomPhrase;
   }
 });
+const bellButton = document.getElementById("bellButton");
+const reminderDropdown = document.getElementById("reminderList");
+const reminderItems = document.getElementById("reminderItems");
+const noRemindersText = document.querySelector(".no-reminders");
+
+if (bellButton && reminderDropdown && reminderItems && noRemindersText) {
+  bellButton.addEventListener("click", () => {
+    reminderDropdown.classList.toggle("show");
+
+    reminderItems.innerHTML = "";
+
+    const reminders = JSON.parse(localStorage.getItem("reminders") || "[]");
+
+    if (reminders.length === 0) {
+      noRemindersText.style.display = "block";
+      return;
+    }
+
+    noRemindersText.style.display = "none";
+
+    reminders.forEach(rem => {
+      const li = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = `client-card.html?id=${rem.id}`;
+      link.textContent = `${rem.name} — ${rem.date}${rem.comment ? ` (${rem.comment})` : ""}`;
+      li.appendChild(link);
+      reminderItems.appendChild(li);
+    });
+  });
+}

@@ -2,127 +2,107 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Coldi CRM — Leads</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="img/logo.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="css/home.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: url("../img/bg-light.svg") no-repeat center center fixed;
-      background-size: cover;
-      color: #1e1e1e;
-    }
-
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      background: #fff;
-      width: 240px;
-      height: 100vh;
-      box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
-      padding: 1.5rem 1rem;
-    }
-
-    nav h2 {
-      font-size: 1.5rem;
-      color: #2563eb;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    nav img {
-      width: 20px;
-    }
-
-    nav ul {
-      list-style: none;
-      padding: 0;
-      margin-top: 2rem;
-    }
-
-    nav ul li {
-      margin: 1rem 0;
-    }
-
-    nav ul li a {
-      text-decoration: none;
-      color: #1e1e1e;
-      font-weight: 500;
-    }
-
-    main {
-      margin-left: 260px;
-      padding: 2rem;
-      animation: fadeIn 0.7s ease;
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    .lead-card {
-      background: white;
-      border-radius: 10px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-
-    .lead-left, .lead-right {
-      width: 48%;
-    }
-
-    .lead-left strong {
-      color: #2563eb;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+  <script src="js/leads.js" defer></script>
 </head>
 <body>
-  <nav>
-    <h2><img src="img/logo.svg" alt="Logo"> Coldi CRM</h2>
-    <ul>
-      <li><a href="home.html">🏠 Home</a></li>
-      <li><a href="leads.html">📋 Leads</a></li>
-      <li><a id="settingsLink" href="settings.html" style="display: none;">⚙️ Settings</a></li>
-      <li><a href="#" id="logout">📤 Logout</a></li>
-    </ul>
-  </nav>
+  <div class="main-layout">
+    <aside class="sidebar">
+      <img src="img/logo.svg" alt="Coldi CRM" class="logo-side" />
+      <nav>
+        <a href="home.html">🏠 Home</a>
+        <a href="leads.html" class="active">📞 Leads</a>
+        <a href="admin.html" id="settingsLink">⚙️ Settings</a>
+        <button id="logout" class="logout-btn">🚪 Logout</button>
+      </nav>
+    </aside>
 
-  <main>
-    <h1>Leads</h1>
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-header">
+          <h1>📋 Leads</h1>
 
-    <!-- Пример карточки -->
-    <div class="lead-card">
-      <div class="lead-left">
-        <p><strong>Name:</strong> John Doe</p>
-        <p><strong>Email:</strong> john@example.com</p>
-        <p><strong>Phone:</strong> +1 234 567 890</p>
-        <p><strong>Country:</strong> USA</p>
-        <p><strong>Affiliate:</strong> Google</p>
-        <p><strong>Date:</strong> 2025-06-14</p>
-      </div>
-      <div class="lead-right">
-        <p><strong>Reminder:</strong> Follow-up next week</p>
-        <p><strong>Comment:</strong> Interested in pricing</p>
-        <p><strong>Status:</strong> New</p>
-      </div>
-    </div>
-  </main>
+          <!-- 🔔 КОЛОКОЛЬЧИК -->
+          <div class="notifications">
+            <button id="bellButton">
+              <i class="fas fa-bell"></i>
+            </button>
+            <div id="reminderList" class="reminder-dropdown hidden">
+              <h4>Reminders</h4>
+              <ul id="reminderItems"></ul>
+              <p class="no-reminders">No reminders</p>
+            </div>
+          </div>
+        </div>
 
-  <script src="js/home.js"></script>
+        <div class="top-controls">
+          <input type="text" id="searchInput" placeholder="Search by name, email or phone..." />
+          <select id="statusFilter">
+            <option value="">All Statuses</option>
+            <option value="new">New</option>
+            <option value="no answer">No Answer</option>
+            <option value="never answer">Never Answer</option>
+            <option value="no interested">No Interested</option>
+            <option value="send mail">Send Mail</option>
+            <option value="call back">Call Back</option>
+            <option value="in work">In Work</option>
+            <option value="deposit">Deposit</option>
+            <option value="no potential">No Potential</option>
+            <option value="murzilka">Murzilka</option>
+          </select>
+          <select id="affiliateFilter">
+            <option value="">All Affiliates</option>
+            <!-- JS подгрузит -->
+          </select>
+        </div>
+      </header>
+
+      <section class="leads-list" id="leadsContainer">
+        <!-- JS отрисует сюда -->
+      </section>
+
+      <footer class="pagination" id="paginationControls">
+        <!-- Пагинация -->
+      </footer>
+    </main>
+  </div>
+
+  <div id="reminderToast" class="reminder-toast hidden"></div>
+
+  <!-- ✅ JS для колокольчика -->
+  <script>
+    const bellButton = document.getElementById("bellButton");
+    const reminderDropdown = document.getElementById("reminderList");
+    const reminderItems = document.getElementById("reminderItems");
+    const noRemindersText = document.querySelector(".no-reminders");
+
+    if (bellButton && reminderDropdown && reminderItems && noRemindersText) {
+      bellButton.addEventListener("click", () => {
+        reminderDropdown.classList.toggle("hidden");
+        reminderItems.innerHTML = "";
+
+        const reminders = JSON.parse(localStorage.getItem("reminders") || "[]");
+
+        if (reminders.length === 0) {
+          noRemindersText.style.display = "block";
+          return;
+        }
+
+        noRemindersText.style.display = "none";
+
+        reminders.forEach(rem => {
+          const li = document.createElement("li");
+          const link = document.createElement("a");
+          link.href = `client-card.html?id=${rem.id}`;
+          link.textContent = `${rem.name} — ${rem.date}${rem.comment ? ` (${rem.comment})` : ""}`;
+          li.appendChild(link);
+          reminderItems.appendChild(li);
+        });
+      });
+    }
+  </script>
 </body>
 </html>
