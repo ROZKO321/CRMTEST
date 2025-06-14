@@ -1,100 +1,33 @@
-<div class="client-card">
-  <h2><i class="fa fa-user"></i> <span id="clientName">Клиент</span></h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Client Info</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="clientInfo" style="padding: 30px;"></div>
 
-  <div class="client-fields">
-    <label>Имя: <input type="text" id="clientFirstName" /></label>
-    <label>Фамилия: <input type="text" id="clientLastName" /></label>
-    <label>Телефон: <input type="text" id="clientPhone" /></label>
-    <label>Email: <input type="email" id="clientEmail" /></label>
-    <label>Страна: <input type="text" id="clientCountry" /></label>
-    <label>Аффилиат: <input type="text" id="clientAffiliate" /></label>
-    <label>Статус:
-      <select id="clientStatus">
-        <option value="new">new</option>
-        <option value="call-back">call-back</option>
-        <option value="done">done</option>
-      </select>
-    </label>
-    <label>Комментарий:
-      <textarea id="clientComment"></textarea>
-    </label>
-  </div>
+  <script>
+    const clientId = localStorage.getItem("openClientId");
+    const clients = JSON.parse(localStorage.getItem("crmClients")) || [];
+    const client = clients.find(c => c.id == clientId);
 
-  <h3>Напоминания</h3>
-  <div class="reminders-list" id="remindersList"></div>
+    const div = document.getElementById("clientInfo");
 
-  <input type="datetime-local" id="remDate" />
-  <input type="text" id="remComment" placeholder="Комментарий" />
-  <button onclick="addReminder()" class="btn blue">Добавить напоминание</button>
-  <button onclick="saveClient()" class="btn green">Сохранить</button>
-</div>
-
-<script>
-  let currentClient = null;
-
-  function initClientPage(id) {
-    const clients = JSON.parse(localStorage.getItem("crmClients") || "[]");
-    const client = clients.find(c => c.id == id);
-    if (!client) return document.getElementById("appWrapper").innerHTML = "Клиент не найден";
-
-    currentClient = client;
-
-    document.getElementById("clientName").textContent = `${client.name} ${client.surname}`;
-    document.getElementById("clientFirstName").value = client.name;
-    document.getElementById("clientLastName").value = client.surname;
-    document.getElementById("clientPhone").value = client.phone;
-    document.getElementById("clientEmail").value = client.email;
-    document.getElementById("clientCountry").value = client.country;
-    document.getElementById("clientAffiliate").value = client.affiliate;
-    document.getElementById("clientStatus").value = client.status;
-    document.getElementById("clientComment").value = client.comment || "";
-
-    renderReminders();
-  }
-
-  function renderReminders() {
-    const list = document.getElementById("remindersList");
-    list.innerHTML = "";
-    (currentClient.reminders || []).forEach(rem => {
-      const div = document.createElement("div");
-      div.classList.add("reminder-item");
-      div.innerHTML = `<strong>${formatDateTime(rem.datetime)}</strong>: ${rem.comment}`;
-      list.appendChild(div);
-    });
-  }
-
-  function addReminder() {
-    const datetime = document.getElementById("remDate").value;
-    const comment = document.getElementById("remComment").value.trim();
-    if (!datetime || !comment) return alert("Укажите дату и комментарий");
-
-    currentClient.reminders = currentClient.reminders || [];
-    currentClient.reminders.push({ datetime, comment });
-    renderReminders();
-    document.getElementById("remDate").value = "";
-    document.getElementById("remComment").value = "";
-    saveClient();
-  }
-
-  function saveClient() {
-    const clients = JSON.parse(localStorage.getItem("crmClients") || "[]");
-    const index = clients.findIndex(c => c.id == currentClient.id);
-    if (index === -1) return alert("Клиент не найден");
-
-    clients[index] = {
-      ...currentClient,
-      name: document.getElementById("clientFirstName").value,
-      surname: document.getElementById("clientLastName").value,
-      phone: document.getElementById("clientPhone").value,
-      email: document.getElementById("clientEmail").value,
-      country: document.getElementById("clientCountry").value,
-      affiliate: document.getElementById("clientAffiliate").value,
-      status: document.getElementById("clientStatus").value,
-      comment: document.getElementById("clientComment").value,
-      reminders: currentClient.reminders || []
-    };
-
-    localStorage.setItem("crmClients", JSON.stringify(clients));
-    alert("Сохранено");
-  }
-</script>
+    if (client) {
+      div.innerHTML = `
+        <h2>${client.name} ${client.surname}</h2>
+        <p><strong>Email:</strong> ${client.email}</p>
+        <p><strong>Phone:</strong> ${client.phone}</p>
+        <p><strong>Status:</strong> ${client.status}</p>
+        <p><strong>Affiliate:</strong> ${client.affiliate}</p>
+        <p><strong>Manager:</strong> ${client.manager}</p>
+        <p><strong>Comment:</strong> ${client.comment}</p>
+      `;
+    } else {
+      div.innerHTML = `<p>Клиент не найден</p>`;
+    }
+  </script>
+</body>
+</html>

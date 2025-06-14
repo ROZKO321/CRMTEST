@@ -192,3 +192,53 @@ button:hover {
   --text-color: #ffffff;
   --accent-color: #1fa2ff;
 }
+.reminder-popup {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background: var(--sidebar-bg);
+  border: 1px solid var(--text-color);
+  color: var(--text-color);
+  border-radius: 8px;
+  padding: 10px;
+  width: 300px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  display: none;
+  z-index: 999;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.reminder-popup.visible {
+  display: block;
+}
+
+.reminder-item {
+  padding: 6px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.reminder-name {
+  cursor: pointer;
+  color: var(--accent-color);
+}
+
+.reminder-name:hover {
+  text-decoration: underline;
+}
+
+.reminder-text {
+  font-size: 0.9em;
+  margin: 4px 0;
+}
+
+.reminder-date {
+  font-size: 0.8em;
+  color: gray;
+}
+
+.reminder-empty {
+  text-align: center;
+  font-style: italic;
+  color: gray;
+}
