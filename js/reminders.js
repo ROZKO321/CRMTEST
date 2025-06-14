@@ -26,9 +26,7 @@ function renderReminders() {
   clients.forEach(client => {
     if (user.role === "admin" || client.manager === user.login) {
       (client.reminders || []).forEach(rem => {
-        const comment = rem.comment && rem.comment.trim()
-          ? rem.comment
-          : (client.comment || "Без комментария");
+        const comment = rem.comment?.trim() || client.comment || "Без комментария";
 
         reminders.push({
           name: `${client.name} ${client.surname}`,
@@ -48,9 +46,8 @@ function renderReminders() {
           <em>${rem.comment}</em>
         </div>
       `).join("")
-    : `<div class="reminder-empty" data-i18n="reminder.empty">Нет напоминаний</div>`;
+    : `<div class="reminder-empty" data-i18n="reminder.empty">У вас пока нет активных напоминаний</div>`;
 
-  // переход к клиенту
   document.querySelectorAll(".reminder-link").forEach(link => {
     link.addEventListener("click", () => {
       const id = link.getAttribute("data-id");

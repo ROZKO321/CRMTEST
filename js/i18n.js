@@ -1,10 +1,14 @@
-const langSelect = document.getElementById("languageToggle");
 let translations = {};
 
 function applyTranslations() {
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
     if (translations[key]) el.innerText = translations[key];
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const key = el.getAttribute("data-i18n-placeholder");
+    if (translations[key]) el.setAttribute("placeholder", translations[key]);
   });
 }
 
@@ -18,13 +22,14 @@ function loadLanguage(lang = "ru") {
   localStorage.setItem("crmLang", lang);
 }
 
-langSelect?.addEventListener("change", () => {
-  const lang = langSelect.value;
-  loadLanguage(lang);
-});
-
 document.addEventListener("DOMContentLoaded", () => {
-  const saved = localStorage.getItem("crmLang") || "ru";
-  langSelect.value = saved;
-  loadLanguage(saved);
+  const langSelect = document.getElementById("languageToggle");
+  const savedLang = localStorage.getItem("crmLang") || "ru";
+  if (langSelect) langSelect.value = savedLang;
+  loadLanguage(savedLang);
+
+  langSelect?.addEventListener("change", () => {
+    const newLang = langSelect.value;
+    loadLanguage(newLang);
+  });
 });

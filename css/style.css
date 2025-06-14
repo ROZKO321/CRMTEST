@@ -1,34 +1,39 @@
 :root {
-  --bg-color: #ffffff;
-  --text-color: #1a1a1a;
-  --panel-bg: #f5f5f5;
-  --sidebar-bg: #ffffff;
-  --accent-color: #007bff;
-  --card-bg: #ffffff;
+  --bg: #f9f9f9;
+  --text: #1a1a1a;
+  --panel: #ffffff;
+  --accent: #007bff;
+  --border: #e0e0e0;
+  --shadow: rgba(0, 0, 0, 0.05);
+  --radius: 10px;
+  --font: 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: var(--bg-color);
-  color: var(--text-color);
-  transition: all 0.3s ease;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
 }
 
 .main-layout {
   display: flex;
   height: 100vh;
+  overflow: hidden;
 }
 
-/* Sidebar */
+/* SIDEBAR */
 .sidebar {
   width: 220px;
-  background: var(--sidebar-bg);
+  background: var(--panel);
+  border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   transition: width 0.3s ease;
-  border-right: 1px solid #ccc;
-  position: relative;
 }
 
 .sidebar.collapsed {
@@ -36,40 +41,38 @@ body {
 }
 
 .sidebar-header {
-  padding: 1rem;
   display: flex;
   align-items: center;
   gap: 10px;
+  padding: 1rem;
+  font-weight: bold;
+  font-size: 1.1rem;
 }
 
-.sidebar .crm-label {
-  font-weight: bold;
-  font-size: 1.2rem;
+.sidebar img {
+  width: 28px;
+  height: 28px;
 }
 
 .sidebar nav ul {
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
 .sidebar nav li {
+  padding: 0.9rem 1rem;
   display: flex;
   align-items: center;
-  padding: 0.9rem 1rem;
+  gap: 10px;
   cursor: pointer;
-  transition: background 0.2s;
-  font-size: 15px;
+  transition: background 0.2s ease;
 }
 
 .sidebar nav li:hover,
 .sidebar nav li.active {
-  background: var(--accent-color);
-  color: white;
-}
-
-.sidebar nav li i {
-  margin-right: 8px;
+  background: var(--accent);
+  color: #fff;
 }
 
 .sidebar.collapsed nav li span {
@@ -77,47 +80,51 @@ body {
 }
 
 .sidebar-toggle {
-  position: absolute;
-  bottom: 10px;
-  width: 100%;
+  margin-top: auto;
   text-align: center;
-  font-size: 18px;
+  padding: 0.8rem;
   cursor: pointer;
 }
 
-/* Content Area */
+/* CONTENT */
 .content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: var(--bg-color);
 }
 
-/* Header */
 .top-panel {
+  background: var(--panel);
+  padding: 0.7rem 1.2rem;
+  border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--panel-bg);
-  padding: 0.7rem 1rem;
-  border-bottom: 1px solid #ccc;
 }
 
-.top-panel .notification-wrapper {
+.top-panel select {
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+/* NOTIFICATIONS */
+.notification-wrapper {
   position: relative;
 }
 
 #reminderBox {
   position: absolute;
-  top: 40px;
+  top: 35px;
   right: 0;
-  background: var(--card-bg);
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
   width: 300px;
   max-height: 400px;
-  overflow-y: auto;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px var(--shadow);
   padding: 10px;
+  overflow-y: auto;
   display: none;
   z-index: 99;
 }
@@ -128,42 +135,72 @@ body {
 
 .reminder-header {
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
 }
 
 #reminderList .reminder-item {
-  background: var(--panel-bg);
-  padding: 0.5rem;
-  margin-bottom: 5px;
-  border-radius: 6px;
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
   cursor: pointer;
-  transition: background 0.2s;
 }
 
 #reminderList .reminder-item:hover {
-  background: var(--accent-color);
-  color: white;
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--radius);
 }
 
-/* Utility */
+/* BUTTONS, INPUTS */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+  outline: none;
+}
+
+button {
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: #0056c1;
+}
+
+textarea {
+  resize: vertical;
+}
+
 .hidden {
   display: none;
 }
 
-button,
-input,
-select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-family: inherit;
-  transition: 0.2s;
+/* HOME */
+.home-welcome {
+  max-width: 700px;
+  margin: 80px auto;
+  text-align: center;
+  background: var(--panel);
+  padding: 30px;
+  border-radius: var(--radius);
+  box-shadow: 0 0 10px var(--shadow);
 }
 
-button:hover {
-  background-color: var(--accent-color);
-  color: #fff;
-  cursor: pointer;
+.home-welcome h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.motivation {
+  font-size: 1.1rem;
+  color: #666;
 }
 .login-box {
   background: white;
@@ -204,7 +241,7 @@ button:hover {
   text-align: center;
   padding: 30px;
   border-radius: 12px;
-  background: var(--panel-bg);
+  background: var(--panel);
   box-shadow: 0 0 30px rgba(0,0,0,0.05);
 }
 
@@ -216,81 +253,4 @@ button:hover {
 .motivation {
   font-size: 1.1rem;
   color: #555;
-}
-.leads-controls {
-  display: flex;
-  gap: 10px;
-  margin: 20px;
-  flex-wrap: wrap;
-}
-
-.leads-controls input,
-.leads-controls select {
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-.lead-card {
-  display: flex;
-  justify-content: space-between;
-  background: var(--panel-bg);
-  border-radius: 8px;
-  padding: 15px;
-  margin: 10px 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-.lead-left {
-  max-width: 50%;
-  line-height: 1.5;
-}
-
-.lead-right {
-  max-width: 45%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.lead-right label {
-  font-size: 14px;
-  display: flex;
-  flex-direction: column;
-}
-
-.lead-right input,
-.lead-right select,
-.lead-right textarea {
-  font-size: 13px;
-  padding: 6px;
-  border-radius: 6px;
-  border: 1px solid #bbb;
-  margin-top: 4px;
-}
-
-textarea {
-  resize: vertical;
-}
-
-#paginationControls {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-#paginationControls button {
-  margin: 0 4px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  background: var(--accent-color);
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-#paginationControls button:disabled {
-  background: #ccc;
-  cursor: default;
 }

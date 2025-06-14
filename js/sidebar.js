@@ -11,17 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(html => {
         appWrapper.innerHTML = html;
 
-        if (page === "leads.html" && typeof initLeads === "function") {
-          initLeads();
-        }
-
-        if (page === "settings.html" && typeof initSettingsPage === "function") {
-          initSettingsPage();
-        }
-
-        if (page === "home.html" && typeof initHomePage === "function") {
-          initHomePage();
-        }
+        // Инициализация логики вкладок
+        if (page === "leads.html" && typeof initLeads === "function") initLeads();
+        if (page === "settings.html" && typeof initSettingsPage === "function") initSettingsPage();
+        if (page === "home.html" && typeof initHomePage === "function") initHomePage();
+        if (typeof applyTranslations === "function") applyTranslations();
       });
   }
 
@@ -29,30 +23,27 @@ document.addEventListener("DOMContentLoaded", () => {
     item.addEventListener("click", () => {
       navItems.forEach(i => i.classList.remove("active"));
       item.classList.add("active");
-
       const page = item.getAttribute("data-page");
       if (page) loadPage(page);
     });
   });
 
-  // Logout
   logoutBtn.addEventListener("click", () => {
     localStorage.removeItem("crmCurrentUser");
     window.location.href = "login.html";
   });
 
-  // Toggle sidebar
   toggleBtn.addEventListener("click", () => {
     sidebar.classList.toggle("collapsed");
   });
 
-  // Load home on first launch
   const currentUser = JSON.parse(localStorage.getItem("crmCurrentUser"));
   if (!currentUser) {
     window.location.href = "login.html";
     return;
   }
 
-  document.querySelector(`[data-page="home.html"]`)?.classList.add("active");
+  const defaultItem = document.querySelector(`[data-page="home.html"]`);
+  defaultItem?.classList.add("active");
   loadPage("home.html");
 });

@@ -1,4 +1,3 @@
-// DEMO клиенты
 if (!localStorage.getItem("crmClients")) {
   localStorage.setItem("crmClients", JSON.stringify([
     {
@@ -32,7 +31,6 @@ if (!localStorage.getItem("crmClients")) {
   ]));
 }
 
-// DEMO пользователи
 if (!localStorage.getItem("crmUsers")) {
   localStorage.setItem("crmUsers", JSON.stringify([
     { login: "admin", password: "admin123", role: "admin" },
@@ -41,7 +39,6 @@ if (!localStorage.getItem("crmUsers")) {
   ]));
 }
 
-// Язык по умолчанию
 if (!localStorage.getItem("crmLang")) {
   localStorage.setItem("crmLang", "ru");
 }
