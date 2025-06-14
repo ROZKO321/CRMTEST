@@ -2,5 +2,7 @@
   "menu.home": "Home",
   "menu.leads": "Leads",
   "menu.settings": "Settings",
-  "menu.logout": "Logout"
+  "menu.logout": "Logout",
+  "myLeads": "My Leads",
+  "adminSettings": "Admin Settings"
 }
