@@ -179,3 +179,16 @@ button:hover {
   color: #fff;
   cursor: pointer;
 }
+:root[data-theme='light'] {
+  --bg-color: #f4f4f4;
+  --sidebar-bg: #ffffff;
+  --text-color: #111111;
+  --accent-color: #007bff;
+}
+
+:root[data-theme='dark'] {
+  --bg-color: #121212;
+  --sidebar-bg: #1e1e1e;
+  --text-color: #ffffff;
+  --accent-color: #1fa2ff;
+}
