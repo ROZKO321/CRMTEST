@@ -1,15 +1,31 @@
-document.getElementById("loginForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+  const loginBtn = document.getElementById("loginBtn");
 
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
+  loginBtn.addEventListener("click", function () {
+    const login = document.getElementById("login").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-  // Пример логики проверки:
-  if ((username === "admin" && password === "admin123") ||
-      (username === "manager" && password === "manager123")) {
-    localStorage.setItem("userRole", username === "admin" ? "admin" : "manager");
+    if (login === "" || password === "") {
+      alert("Пожалуйста, заполните все поля.");
+      return;
+    }
+
+    // Пример простой авторизации
+    let role = "";
+    if (login === "admin" && password === "admin") {
+      role = "admin";
+    } else if (login === "manager" && password === "manager") {
+      role = "manager";
+    } else {
+      alert("Неверный логин или пароль");
+      return;
+    }
+
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify({ login, role })
+    );
+
     window.location.href = "home.html";
-  } else {
-    document.getElementById("loginError").innerText = "Invalid login or password!";
-  }
+  });
 });
