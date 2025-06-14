@@ -1,36 +1,149 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Карточка клиента</title>
+  <title>Client Card</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6fb;
+      padding: 40px;
+      color: #333;
+    }
+
+    #clientCard {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.08);
+      display: flex;
+      gap: 40px;
+    }
+
+    .card-left, .card-right {
+      flex: 1;
+    }
+
+    .card-left h2 {
+      margin-bottom: 20px;
+    }
+
+    .card-left p {
+      margin: 10px 0;
+    }
+
+    .card-right h3 {
+      margin-top: 0;
+    }
+
+    .card-right textarea,
+    .card-right input,
+    .card-right select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      resize: vertical;
+    }
+
+    .save-btn {
+      background-color: #3f80ff;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .save-btn:hover {
+      background-color: #326ee3;
+    }
+  </style>
 </head>
-<body style="padding: 40px; font-family: 'Segoe UI', sans-serif;">
+<body>
   <div id="clientCard">
-    <h2>Загрузка...</h2>
+    <div class="card-left">
+      <h2 id="clientName">Loading...</h2>
+      <p><strong>📞 Phone:</strong> <span id="clientPhone"></span></p>
+      <p><strong>✉️ Email:</strong> <span id="clientEmail"></span></p>
+      <p><strong>🌍 Country:</strong> <span id="clientCountry"></span></p>
+      <p><strong>🏷️ Affiliate:</strong> <span id="clientAffiliate"></span></p>
+      <p><strong>📦 Status:</strong> <span id="clientStatus"></span></p>
+      <p><strong>🕒 Uploaded:</strong> <span id="clientDate"></span></p>
+      <p><strong>👤 Manager:</strong> <span id="clientManager"></span></p>
+    </div>
+    <div class="card-right">
+      <h3>Reminder</h3>
+      <input type="datetime-local" id="reminderDate" />
+      <textarea id="reminderComment" placeholder="Comment..."></textarea>
+      <button class="save-btn" onclick="saveReminder()">Save Reminder</button>
+    </div>
   </div>
 
   <script>
     const clientId = localStorage.getItem("openClientId");
     const clients = JSON.parse(localStorage.getItem("crmClients") || "[]");
     const client = clients.find(c => c.id == clientId);
-    const card = document.getElementById("clientCard");
+
+    const el = (id) => document.getElementById(id);
 
     if (client) {
-      card.innerHTML = `
-        <h2>${client.name} ${client.surname}</h2>
-        <p><strong>📞 Телефон:</strong> ${client.phone}</p>
-        <p><strong>✉️ Email:</strong> ${client.email}</p>
-        <p><strong>🌍 Страна:</strong> ${client.country}</p>
-        <p><strong>🏷️ Аффилиат:</strong> ${client.affiliate}</p>
-        <p><strong>📦 Статус:</strong> ${client.status}</p>
-        <p><strong>💬 Комментарий:</strong> ${client.comment || "-"}</p>
-        <p><strong>🕒 Загружен:</strong> ${new Date(client.createdAt).toLocaleString()}</p>
-        <p><strong>👤 Менеджер:</strong> ${client.manager}</p>
-      `;
+      el("clientName").textContent = `${client.name || client.firstName} ${client.surname || client.lastName}`;
+      el("clientPhone").textContent = client.phone;
+      el("clientEmail").textContent = client.email;
+      el("clientCountry").textContent = client.country;
+      el("clientAffiliate").textContent = client.affiliate;
+      el("clientStatus").textContent = client.status;
+      el("clientDate").textContent = new Date(client.createdAt || client.dateAdded).toLocaleString();
+      el("clientManager").textContent = client.manager || "—";
+
+      if (client.reminder) el("reminderDate").value = client.reminder;
+      if (client.comment) el("reminderComment").value = client.comment;
     } else {
-      card.innerHTML = "<h3>Клиент не найден</h3>";
+      document.getElementById("clientCard").innerHTML = "<h3>Client not found</h3>";
+    }
+
+    function saveReminder() {
+      const date = el("reminderDate").value;
+      const comment = el("reminderComment").value.trim();
+      const currentUser = localStorage.getItem("username") || "unknown";
+
+      if (!date) {
+        alert("Please select date and time.");
+        return;
+      }
+
+      const newReminder = {
+        clientId,
+        clientName: `${client.name || client.firstName} ${client.surname || client.lastName}`,
+        date,
+        comment,
+        lastComment: comment,
+        manager: currentUser
+      };
+
+      let existing = JSON.parse(localStorage.getItem("reminders") || "[]");
+      existing.push(newReminder);
+      localStorage.setItem("reminders", JSON.stringify(existing));
+
+      const updatedClients = clients.map(c => {
+        if (c.id == clientId) {
+          c.reminder = date;
+          c.comment = comment;
+        }
+        return c;
+      });
+      localStorage.setItem("crmClients", JSON.stringify(updatedClients));
+
+      alert("Reminder saved!");
     }
   </script>
 </body>

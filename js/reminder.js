@@ -1,41 +1,82 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const notificationCount = document.getElementById("notificationCount");
-  const notificationList = document.getElementById("notificationList");
+  const bellBtn = document.querySelector(".icon-btn");
+  const reminderCount = document.getElementById("reminder-count");
   const role = localStorage.getItem("role");
-  const lang = localStorage.getItem("lang") || "en";
+  const username = localStorage.getItem("username");
+  const now = new Date().toISOString();
 
-  // Примерные данные — ты заменишь это на загрузку из базы/хранилища позже
-  const allReminders = JSON.parse(localStorage.getItem("reminders") || "[]");
-  const allClients = JSON.parse(localStorage.getItem("clients") || "[]");
-  const manager = localStorage.getItem("username") || "";
+  // Получаем все напоминания
+  const reminders = JSON.parse(localStorage.getItem("reminders") || "[]");
 
-  let visibleReminders = allReminders.filter(rem => {
+  // Фильтруем по роли
+  const filtered = reminders.filter(rem => {
+    if (!rem.date) return false;
+    if (new Date(rem.date) < new Date()) return false; // Устаревшие не показываем
     if (role === "admin") return true;
-    return rem.manager === manager;
+    return rem.manager === username;
   });
 
-  // Удаляем старые
-  visibleReminders = visibleReminders.filter(r => new Date(r.date) >= new Date());
+  // Обновляем бейдж
+  if (filtered.length > 0) {
+    reminderCount.style.display = "inline-block";
+    reminderCount.innerText = filtered.length;
+  } else {
+    reminderCount.style.display = "none";
+  }
 
-  notificationCount.innerText = visibleReminders.length;
-  notificationCount.style.display = visibleReminders.length > 0 ? "inline-block" : "none";
+  // Отображение списка (при клике)
+  bellBtn.addEventListener("click", () => {
+    const containerId = "reminder-dropdown";
+    let dropdown = document.getElementById(containerId);
 
-  // Отображаем список
-  notificationList.innerHTML = "";
-  visibleReminders.sort((a, b) => new Date(a.date) - new Date(b.date));
-  visibleReminders.forEach(rem => {
-    const client = allClients.find(c => c.id === rem.clientId) || {};
-    const comment = rem.comment || client.lastComment || "No comment";
-    const date = new Date(rem.date).toLocaleString();
+    if (dropdown) {
+      dropdown.remove();
+      return;
+    }
 
-    const item = document.createElement("div");
-    item.className = "note";
-    item.innerHTML = `<strong>${client.firstName || "No Name"}:</strong> ${comment} <br><small>${date}</small>`;
+    dropdown = document.createElement("div");
+    dropdown.id = containerId;
+    dropdown.style.position = "absolute";
+    dropdown.style.top = "60px";
+    dropdown.style.right = "20px";
+    dropdown.style.width = "320px";
+    dropdown.style.maxHeight = "400px";
+    dropdown.style.overflowY = "auto";
+    dropdown.style.background = "#fff";
+    dropdown.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
+    dropdown.style.borderRadius = "8px";
+    dropdown.style.padding = "10px";
+    dropdown.style.zIndex = "999";
 
-    item.onclick = () => {
-      window.open(`client-card.html?id=${client.id}`, "_blank");
+    if (filtered.length === 0) {
+      dropdown.innerHTML = `<p style="margin: 10px;">No reminders</p>`;
+    } else {
+      dropdown.innerHTML = filtered.map(rem => `
+        <div style="padding: 8px; border-bottom: 1px solid #eee;">
+          <a href="#" onclick="openClient(${rem.clientId})" style="font-weight: bold; color: #1a73e8;">${rem.clientName}</a><br/>
+          <small>🕒 ${new Date(rem.date).toLocaleString()}</small><br/>
+          <small>💬 ${rem.comment || rem.lastComment || "-"}</small>
+        </div>
+      `).join("");
+    }
+
+    document.body.appendChild(dropdown);
+
+    // Закрытие при клике вне
+    const closeOnClickOutside = (e) => {
+      if (!dropdown.contains(e.target) && !bellBtn.contains(e.target)) {
+        dropdown.remove();
+        document.removeEventListener("click", closeOnClickOutside);
+      }
     };
-
-    notificationList.appendChild(item);
+    setTimeout(() => {
+      document.addEventListener("click", closeOnClickOutside);
+    }, 0);
   });
 });
+
+// Функция перехода к карточке клиента
+function openClient(id) {
+  localStorage.setItem("openClientId", id);
+  window.open("client.html", "_blank");
+}

@@ -109,14 +109,46 @@ function openClientModal(id) {
 function saveClientChanges() {
   if (!selectedLead) return;
 
-  selectedLead.reminder = document.getElementById("reminderDate").value;
-  selectedLead.comment = document.getElementById("reminderComment").value;
-  selectedLead.status = document.getElementById("statusSelect").value;
+  const reminderDate = document.getElementById("reminderDate").value;
+  const reminderComment = document.getElementById("reminderComment").value.trim();
+  const status = document.getElementById("statusSelect").value;
+  const manager = localStorage.getItem("username") || "unknown";
+
+  // Обновляем данные внутри выбранного лида
+  selectedLead.reminder = reminderDate;
+  selectedLead.comment = reminderComment;
+  selectedLead.status = status;
+
+  // Обновляем данные в основном списке leads
+  const updatedLeads = leads.map(lead => {
+    if (lead.id === selectedLead.id) {
+      return { ...lead, reminder: reminderDate, comment: reminderComment, status };
+    }
+    return lead;
+  });
+
+  // Сохраняем обновлённый список leads
+  localStorage.setItem("crmClients", JSON.stringify(updatedLeads));
+
+  // Сохраняем напоминание отдельно
+  if (reminderDate) {
+    const newReminder = {
+      clientId: selectedLead.id,
+      clientName: `${selectedLead.firstName} ${selectedLead.lastName}`,
+      date: reminderDate,
+      comment: reminderComment,
+      lastComment: reminderComment,
+      manager
+    };
+
+    const existingReminders = JSON.parse(localStorage.getItem("reminders") || "[]");
+    existingReminders.push(newReminder);
+    localStorage.setItem("reminders", JSON.stringify(existingReminders));
+  }
 
   closeClientModal();
   renderLeads();
 }
-
 // Закрытие
 function closeClientModal() {
   clientModal.style.display = "none";
