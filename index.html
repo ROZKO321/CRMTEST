@@ -6,65 +6,68 @@
   <title>CRM | Вход</title>
   <link rel="stylesheet" href="css/style.css" />
   <style>
-    body.login-body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #f1f4f9;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+  body.login-body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to bottom right, #eef2f7, #f5f9ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
 
-    .login-container {
-      background: #fff;
-      padding: 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
+  .login-container {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 14px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    max-width: 380px;
+    width: 100%;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
 
-    .login-container h2 {
-      margin-bottom: 25px;
-      font-size: 24px;
-      font-weight: 600;
-      color: #222;
-    }
+  .login-container h2 {
+    margin-bottom: 25px;
+    font-weight: 600;
+    font-size: 24px;
+    color: #222;
+  }
 
-    .login-container input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-      transition: 0.3s;
-    }
+  .login-container input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 18px;
+    border: 1px solid #dce3eb;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.3s ease;
+  }
 
-    .login-container input:focus {
-      border-color: #007bff;
-      outline: none;
-    }
+  .login-container input:focus {
+    border-color: #007bff;
+    outline: none;
+  }
 
-    .login-container button {
-      width: 100%;
-      padding: 12px;
-      background-color: #007bff;
-      border: none;
-      border-radius: 6px;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+  .login-container button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  }
 
-    .login-container button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+  .login-container button:hover {
+    background-color: #0056b3;
+  }
+</style>
 </head>
 <body class="login-body">
   <div class="login-container">
@@ -84,7 +87,7 @@
         return;
       }
 
-      if (user === "admin" && pass === "admin") {
+      if (user === "admin" && pass === "admin123") {
         localStorage.setItem("currentUser", JSON.stringify({ role: "admin", username: user }));
         window.location.href = "home.html";
       } else if (user.startsWith("mgr") && pass === "123") {
