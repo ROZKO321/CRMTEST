@@ -228,6 +228,15 @@ body.dark .login-container {
   font-size: 14px;
 }
 .welcome-box {
+.welcome-box {
+  background: linear-gradient(to right, #f0f0f0, #e8f0ff);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+  text-align: center;
+  margin: 60px auto;
+  max-width: 600px;
+}
   max-width: 600px;
   margin: 40px auto;
   padding: 30px;
