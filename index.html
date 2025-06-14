@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CRM Login</title>
+  <title>CRM Вход</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="img/logo.svg" type="image/svg+xml" />
   <link href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.css" rel="stylesheet">
@@ -38,15 +38,6 @@
       margin-bottom: 20px;
       font-size: 24px;
       font-weight: 600;
-    }
-
-    #lang-select {
-      margin-bottom: 20px;
-      padding: 6px 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      width: 100%;
-      font-size: 14px;
     }
 
     .login-field {
@@ -98,47 +89,32 @@
 <body class="login-body">
   <div class="login-container">
     <div class="login-card">
-      <h2 class="login-title" data-i18n="welcome">Welcome to CRM</h2>
-      
-      <select id="lang-select">
-        <option value="en">🌐 English</option>
-        <option value="ru">🌐 Русский</option>
-      </select>
+      <h2 class="login-title">Добро пожаловать в CRM</h2>
 
       <div class="login-field">
         <i class="lucide lucide-user"></i>
-        <input type="text" id="username" placeholder="Username" />
+        <input type="text" id="username" placeholder="Имя пользователя" />
       </div>
 
       <div class="login-field">
         <i class="lucide lucide-lock"></i>
-        <input type="password" id="password" placeholder="Password" />
+        <input type="password" id="password" placeholder="Пароль" />
       </div>
 
-      <button class="login-btn" type="button" onclick="login()" data-i18n="login">Login</button>
+      <button class="login-btn" type="button" onclick="login()">Войти</button>
 
       <p class="login-error" id="login-error" style="display: none;"></p>
     </div>
   </div>
 
-  <script src="js/translations.js"></script>
   <script>
-    const langSelect = document.getElementById("lang-select");
-    const loginError = document.getElementById("login-error");
-
-    langSelect.addEventListener("change", () => {
-      const lang = langSelect.value;
-      localStorage.setItem("lang", lang);
-      translatePage(lang);
-    });
-
     function login() {
       const user = document.getElementById("username").value.trim();
       const pass = document.getElementById("password").value.trim();
-      const lang = localStorage.getItem("lang") || "en";
+      const loginError = document.getElementById("login-error");
 
       if (!user || !pass) {
-        loginError.innerText = translations[lang]["enterCredentials"];
+        loginError.innerText = "Введите имя пользователя и пароль";
         loginError.style.display = "block";
         return;
       }
@@ -150,14 +126,8 @@
         localStorage.setItem("role", "manager");
         window.location.href = "home.html";
       } else {
-        loginError.innerText = translations[lang]["invalidLogin"];
+        loginError.innerText = "Неверный логин или пароль";
         loginError.style.display = "block";
       }
     }
-
-    const savedLang = localStorage.getItem("lang") || "en";
-    langSelect.value = savedLang;
-    translatePage(savedLang);
-  </script>
-</body>
-</html>
+  </scrip

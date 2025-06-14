@@ -1,116 +1,257 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Leads</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>CRM — Лиды</title>
+  <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="img/logo.svg" type="image/svg+xml" />
   <link href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7f9fc;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 240px;
+      background: #fff;
+      border-right: 1px solid #e0e0e0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .sidebar h1 {
+      font-size: 18px;
+      margin-bottom: 40px;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: color 0.3s;
+    }
+
+    .sidebar a:hover {
+      color: #007bff;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 30px 40px;
+      overflow-y: auto;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .filters input, .filters select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .leads-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .lead-card {
+      background: #fff;
+      padding: 16px 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: box-shadow 0.3s;
+    }
+
+    .lead-card:hover {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .lead-left {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .lead-name {
+      font-size: 17px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .lead-info {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      width: 600px;
+      max-width: 90%;
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+    }
+
+    .modal-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .modal-col {
+      flex: 1;
+    }
+
+    .modal textarea,
+    .modal input,
+    .modal select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-top: 8px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .modal-actions {
+      margin-top: 20px;
+      text-align: right;
+    }
+
+    .modal-actions button {
+      padding: 8px 14px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .modal-actions button:hover {
+      background: #0056b3;
+    }
+  </style>
 </head>
 <body>
-  <!-- 📦 БОКОВОЕ МЕНЮ -->
-  <aside class="sidebar">
-    <h2><i class="lucide lucide-layout-dashboard"></i> CRM</h2>
-    <nav>
-      <a href="leads.html" data-i18n="leads">Leads</a>
-      <a href="admin.html" id="admin-link" data-i18n="admin" style="display: none;">Admin Panel</a>
-      <a href="settings.html" id="settings-link" data-i18n="settings" style="display: none;">Settings</a>
-      <a href="index.html" data-i18n="logout">Logout</a>
-    </nav>
-  </aside>
+  <div class="sidebar">
+    <h1>CRM</h1>
+    <a href="home.html"><i class="lucide lucide-home"></i> Главная</a>
+    <a href="leads.html"><i class="lucide lucide-users"></i> Лиды</a>
+    <a href="notifications.html"><i class="lucide lucide-bell"></i> Напоминания</a>
+    <a href="admin.html" id="admin-link" style="display: none;"><i class="lucide lucide-settings"></i> Настройки</a>
+  </div>
 
-  <!-- 📌 ВЕРХНЯЯ ПАНЕЛЬ -->
-  <header class="topbar">
-    <div class="welcome" id="welcome-msg">Welcome!</div>
-    <div class="actions">
-      <button class="icon-btn" id="bell-btn" title="Reminders">
-        <i class="lucide lucide-bell"></i>
-        <span class="bell-badge" id="notificationCount" style="display: none;">0</span>
-      </button>
-      <select id="lang-select">
-        <option value="en">EN</option>
-        <option value="ru">RU</option>
+  <div class="main-content">
+    <h2>Лиды</h2>
+
+    <div class="filters">
+      <input type="text" id="search-input" placeholder="Поиск (имя, email, телефон)" />
+      <select id="status-filter">
+        <option value="">Все статусы</option>
+        <option value="новый">Новый</option>
+        <option value="в работе">В работе</option>
+        <option value="успешно">Успешно</option>
+        <option value="отказ">Отказ</option>
+      </select>
+      <select id="affiliate-filter">
+        <option value="">Все аффилиаты</option>
+        <option value="Site A">Site A</option>
+        <option value="Site B">Site B</option>
+        <option value="Site C">Site C</option>
+      </select>
+      <select id="pagination">
+        <option value="10">10 на странице</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
       </select>
     </div>
-    <div id="notificationList" class="notification-list" style="display: none;"></div>
-  </header>
 
-  <!-- 📄 ОСНОВНОЙ КОНТЕНТ -->
-  <main class="main-container">
-    <div class="content">
-      <h1 class="page-title" data-i18n="leads">Leads</h1>
-
-      <!-- 🔍 ФИЛЬТРЫ -->
-      <div class="filters-container">
-        <input type="text" id="searchInput" placeholder="Search name, email or phone" />
-        <select id="statusFilter">
-          <option value="">All Statuses</option>
-          <option value="New">New</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Done">Done</option>
-        </select>
-        <select id="affiliateFilter">
-          <option value="">All Affiliates</option>
-        </select>
-        <select id="paginationSelect">
-          <option value="10">10 per page</option>
-          <option value="20">20 per page</option>
-          <option value="30">30 per page</option>
-          <option value="50">50 per page</option>
-          <option value="100">100 per page</option>
-        </select>
-      </div>
-
-      <!-- 🧾 СПИСОК ЛИДОВ -->
-      <div id="leadsList"></div>
+    <div class="leads-list" id="leads-list">
+      <!-- Карточки лидов появятся здесь -->
     </div>
-  </main>
+  </div>
 
-  <!-- 🧍 КАРТОЧКА КЛИЕНТА (модалка) -->
-  <div id="clientCardModal" style="display: none;">
-    <div class="client-card">
-      <div class="client-info">
-        <p><strong>Name:</strong> <span id="clientName"></span></p>
-        <p><strong>Email:</strong> <span id="clientEmail"></span></p>
-        <p><strong>Phone:</strong> <span id="clientPhone"></span></p>
-        <p><strong>Country:</strong> <span id="clientCountry"></span></p>
-        <p><strong>Date Added:</strong> <span id="clientDate"></span></p>
-        <p><strong>Affiliate:</strong> <span id="clientAffiliate"></span></p>
+  <!-- Модальное окно карточки -->
+  <div class="modal" id="lead-modal">
+    <div class="modal-content">
+      <h2 id="modal-name">Имя клиента</h2>
+      <div class="modal-row">
+        <div class="modal-col">
+          <label>Телефон</label>
+          <input type="text" id="modal-phone" readonly />
+
+          <label>Email</label>
+          <input type="text" id="modal-email" readonly />
+
+          <label>Страна</label>
+          <input type="text" id="modal-country" readonly />
+
+          <label>Аффилиат</label>
+          <input type="text" id="modal-affiliate" readonly />
+        </div>
+        <div class="modal-col">
+          <label>Напоминание</label>
+          <input type="datetime-local" id="modal-reminder-date" />
+
+          <label>Комментарий</label>
+          <textarea id="modal-comment" rows="3"></textarea>
+
+          <label>Статус</label>
+          <select id="modal-status">
+            <option value="новый">Новый</option>
+            <option value="в работе">В работе</option>
+            <option value="успешно">Успешно</option>
+            <option value="отказ">Отказ</option>
+          </select>
+        </div>
       </div>
-      <div class="client-actions">
-        <label for="reminderDate">Reminder Date:</label>
-        <input type="datetime-local" id="reminderDate" />
 
-        <label for="reminderComment">Reminder Comment:</label>
-        <textarea id="reminderComment" placeholder="Comment..."></textarea>
-
-        <label for="statusSelect">Change Status:</label>
-        <select id="statusSelect">
-          <option value="New">New</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Done">Done</option>
-        </select>
-      </div>
-      <div class="modal-buttons">
-        <button class="cancel-btn" onclick="closeClientModal()">Cancel</button>
-        <button class="save-btn" onclick="saveClientChanges()">Save</button>
+      <div class="modal-actions">
+        <button onclick="saveLead()">Сохранить</button>
       </div>
     </div>
   </div>
 
-  <!-- ✅ СКРИПТЫ -->
-  <script src="js/translations.js"></script>
-  <script src="js/reminder.js"></script>
   <script src="js/leads.js"></script>
-  <script>
-    const langSelect = document.getElementById("lang-select");
-    const savedLang = localStorage.getItem("lang") || "en";
-    langSelect.value = savedLang;
-    translatePage(savedLang);
-
-    langSelect.addEventListener("change", () => {
-      const newLang = langSelect.value;
-      localStorage.setItem("lang", newLang);
-      translatePage(newLang);
-    });
+</body>
+</html>

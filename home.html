@@ -1,195 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CRM Home</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>CRM Главная</title>
+  <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="img/logo.svg" type="image/svg+xml" />
-  <link href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.css" rel="stylesheet">
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f6fb;
-      color: #333;
+      background: #f7f9fc;
+      display: flex;
     }
 
     .sidebar {
       width: 240px;
-      height: 100vh;
       background: #ffffff;
-      border-right: 1px solid #ddd;
-      position: fixed;
-      top: 0;
-      left: 0;
+      border-right: 1px solid #e0e0e0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
       padding: 20px;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
     }
 
-    .sidebar h2 {
-      font-size: 20px;
-      margin-bottom: 30px;
+    .sidebar-logo {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      margin-bottom: 40px;
     }
 
-    .sidebar nav a {
-      display: block;
-      padding: 12px;
-      color: #333;
+    .sidebar-logo img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .sidebar h1 {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .sidebar a {
       text-decoration: none;
-      border-radius: 8px;
-      margin-bottom: 8px;
-      transition: background 0.3s;
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: color 0.3s;
     }
 
-    .sidebar nav a:hover {
-      background-color: #eaf0ff;
+    .sidebar a:hover {
+      color: #007bff;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 40px;
+    }
+
+    .welcome {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .role-info {
+      color: #666;
+      font-size: 16px;
     }
 
     .topbar {
-      margin-left: 240px;
-      height: 60px;
-      background-color: #fff;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
-      border-bottom: 1px solid #ddd;
-      position: relative;
+      align-items: center;
+      margin-bottom: 40px;
     }
 
-    .topbar .welcome {
-      font-size: 18px;
-      font-weight: 500;
-    }
-
-    .actions {
+    .logout-btn {
+      background: none;
+      border: none;
+      color: #007bff;
+      font-size: 15px;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 16px;
-      position: relative;
+      gap: 6px;
     }
 
-    .notification-bell {
-      position: relative;
-      cursor: pointer;
-    }
-
-    .notification-count {
-      position: absolute;
-      top: -6px;
-      right: -8px;
-      background: red;
-      color: white;
-      font-size: 11px;
-      padding: 2px 6px;
-      border-radius: 12px;
-      display: none;
-    }
-
-    .notification-list {
-      position: absolute;
-      top: 50px;
-      right: 0;
-      background: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      border-radius: 10px;
-      padding: 10px;
-      width: 280px;
-      max-height: 300px;
-      overflow-y: auto;
-      display: none;
-      z-index: 1000;
-    }
-
-    .notification-list .note {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .notification-list .note:hover {
-      background-color: #f9f9f9;
-    }
-
-    main {
-      margin-left: 240px;
-      padding: 20px;
+    .logout-btn:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <aside class="sidebar">
-    <h2><i class="lucide lucide-layout-dashboard"></i> CRM</h2>
-    <nav>
-      <a href="leads.html" data-i18n="leads">Leads</a>
-      <a href="admin.html" id="admin-link" data-i18n="admin" style="display: none;">Admin Panel</a>
-      <a href="settings.html" id="settings-link" data-i18n="settings" style="display: none;">Settings</a>
-      <a href="index.html" data-i18n="logout">Logout</a>
-    </nav>
-  </aside>
-
-  <header class="topbar">
-    <div class="welcome" id="welcome-msg">Welcome!</div>
-    <div class="actions">
-      <div class="notification-bell" onclick="toggleNotifications()">
-        <i class="lucide lucide-bell"></i>
-        <span class="notification-count" id="notificationCount">0</span>
-        <div class="notification-list" id="notificationList"></div>
-      </div>
-      <select id="lang-select">
-        <option value="en">EN</option>
-        <option value="ru">RU</option>
-      </select>
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <img src="img/logo.svg" alt="CRM" />
+      <h1>CRM</h1>
     </div>
-  </header>
+    <a href="home.html"><i class="lucide lucide-home"></i> Главная</a>
+    <a href="leads.html"><i class="lucide lucide-users"></i> Лиды</a>
+    <a href="notifications.html"><i class="lucide lucide-bell"></i> Напоминания</a>
+    <a href="admin.html" id="admin-link" style="display: none;"><i class="lucide lucide-settings"></i> Настройки</a>
+  </div>
 
-  <main>
-    <h1 data-i18n="dashboard">Dashboard</h1>
-    <p data-i18n="dashboardWelcome">Use the menu to navigate through the CRM system.</p>
-  </main>
+  <div class="main-content">
+    <div class="topbar">
+      <div>
+        <div class="welcome" id="welcome-message">Добро пожаловать!</div>
+        <div class="role-info" id="role-display">Ваша роль: —</div>
+      </div>
+      <button class="logout-btn" onclick="logout()">
+        <i class="lucide lucide-log-out"></i> Выйти
+      </button>
+    </div>
+    
+    <p>Выберите раздел в боковом меню для начала работы.</p>
+  </div>
 
-  <script src="js/translations.js"></script>
-  <script src="js/reminder.js"></script> <!-- подключи файл reminder.js с логикой -->
   <script>
-    const langSelect = document.getElementById("lang-select");
-    const savedLang = localStorage.getItem("lang") || "en";
-    langSelect.value = savedLang;
-    translatePage(savedLang);
-
-    langSelect.addEventListener("change", () => {
-      const newLang = langSelect.value;
-      localStorage.setItem("lang", newLang);
-      translatePage(newLang);
-    });
-
     const role = localStorage.getItem("role");
-    const welcomeMsg = document.getElementById("welcome-msg");
+    const welcome = document.getElementById("welcome-message");
+    const roleDisplay = document.getElementById("role-display");
+    const adminLink = document.getElementById("admin-link");
 
-    if (role === "admin") {
-      document.getElementById("admin-link").style.display = "block";
-      welcomeMsg.innerText = savedLang === "ru" ? "Добро пожаловать, Админ!" : "Welcome, Admin!";
-    } else if (role === "manager") {
-      welcomeMsg.innerText = savedLang === "ru" ? "Добро пожаловать, Менеджер!" : "Welcome, Manager!";
+    if (!role) {
+      window.location.href = "index.html";
     } else {
-      location.href = "index.html";
+      if (role === "admin") {
+        welcome.innerText = "Добро пожаловать, администратор!";
+        roleDisplay.innerText = "Ваша роль: Администратор";
+        adminLink.style.display = "flex";
+      } else {
+        welcome.innerText = "Добро пожаловать, менеджер!";
+        roleDisplay.innerText = "Ваша роль: Менеджер";
+      }
     }
 
-    const hasSettingsAccess = localStorage.getItem("settingsAccess") === "true";
-    if (hasSettingsAccess) {
-      document.getElementById("settings-link").style.display = "block";
-    }
-
-    // Toggle отображение списка напоминаний
-    function toggleNotifications() {
-      const list = document.getElementById("notificationList");
-      list.style.display = list.style.display === "block" ? "none" : "block";
+    function logout() {
+      localStorage.clear();
+      window.location.href = "index.html";
     }
   </script>
-  <script src="js/reminder.js"></script>
 </body>
 </html>
