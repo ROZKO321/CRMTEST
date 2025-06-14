@@ -1,18 +1,36 @@
-<section class="home-welcome">
-  <h1>Welcome to Coldi CRM</h1>
-  <p class="motivation">Let’s achieve greatness together 💼</p>
-</section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coldi CRM — Home</title>
+  <link rel="stylesheet" href="css/home.css" />
+  <link rel="icon" href="img/logo.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">
+        <img src="img/logo.svg" alt="Coldi CRM" />
+        <span>Coldi CRM</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="home.html">🏠 Home</a></li>
+          <li><a href="leads.html">📋 Leads</a></li>
+          <li id="settingsLink"><a href="settings.html">⚙️ Settings</a></li>
+          <li><a href="#" id="logout">🚪 Logout</a></li>
+        </ul>
+      </nav>
+    </aside>
 
-<script>
-function initHomePage() {
-  const user = JSON.parse(localStorage.getItem("crmCurrentUser"));
-  const welcome = document.querySelector(".home-welcome h1");
-  if (user?.role === "admin") {
-    welcome.textContent += " — Admin";
-  } else if (user?.role === "manager") {
-    welcome.textContent += " — Manager";
-  }
-}
-initHomePage();
-applyTranslations();
-</script>
+    <main class="main">
+      <h1 id="welcomeMessage">Welcome</h1>
+      <p class="tagline">Let’s achieve greatness together 🧊</p>
+    </main>
+  </div>
+
+  <script src="js/home.js"></script>
+</body>
+</html>
