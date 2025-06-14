@@ -5,13 +5,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const login = document.getElementById("login").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    if (login === "" || password === "") {
-      alert("Пожалуйста, заполните все поля.");
+    if (!login || !password) {
+      alert("Пожалуйста, заполните все поля");
       return;
     }
 
-    // Пример простой авторизации
     let role = "";
+
     if (login === "admin" && password === "admin") {
       role = "admin";
     } else if (login === "manager" && password === "manager") {
@@ -21,11 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    localStorage.setItem(
-      "currentUser",
-      JSON.stringify({ login, role })
-    );
-
+    localStorage.setItem("currentUser", JSON.stringify({ login, role }));
     window.location.href = "home.html";
   });
 });
