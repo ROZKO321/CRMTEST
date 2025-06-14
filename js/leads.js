@@ -1,161 +1,138 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const leadsContainer = document.getElementById("leadsContainer");
-  const searchInput = document.getElementById("searchInput");
-  const statusFilter = document.getElementById("statusFilter");
-  const affiliateFilter = document.getElementById("affiliateFilter");
-  const paginationControls = document.getElementById("paginationControls");
-  const settingsLink = document.getElementById("settingsLink");
+// Пример данных лидов
+const leads = [
+  {
+    id: 1,
+    firstName: "John",
+    lastName: "Doe",
+    email: "john@example.com",
+    phone: "+123456789",
+    country: "USA",
+    dateAdded: "2025-06-14",
+    affiliate: "Partner A",
+    status: "New",
+    reminder: null,
+    comment: "",
+  },
+  {
+    id: 2,
+    firstName: "Anna",
+    lastName: "Ivanova",
+    email: "anna@example.ru",
+    phone: "+380501234567",
+    country: "Ukraine",
+    dateAdded: "2025-06-13",
+    affiliate: "Affiliate B",
+    status: "In Progress",
+    reminder: null,
+    comment: "",
+  },
+  // добавь больше по желанию
+];
 
-  const userRole = localStorage.getItem("userRole");
-  const currentUser = localStorage.getItem("username");
+let filteredLeads = [...leads];
+let currentPage = 1;
+let leadsPerPage = 10;
 
-  if (!userRole) return (window.location.href = "index.html");
-  if (userRole === "admin") settingsLink.style.display = "block";
+const searchInput = document.getElementById("searchInput");
+const statusFilter = document.getElementById("statusFilter");
+const affiliateFilter = document.getElementById("affiliateFilter");
+const paginationSelect = document.getElementById("paginationSelect");
+const leadsList = document.getElementById("leadsList");
 
-  let allLeads = [];
-  let filteredLeads = [];
-  let currentPage = 1;
-  const leadsPerPage = 20;
+// МОДАЛЬНОЕ ОКНО
+const clientModal = document.getElementById("clientCardModal");
+let selectedLead = null;
 
-  // Загрузка лидов (заменить на fetch в реальном проекте)
-  fetch("data/leads.json")
-    .then((res) => res.json())
-    .then((data) => {
-      allLeads = data.filter((lead) => {
-        if (userRole === "admin") return true;
-        return lead.manager === currentUser;
-      });
-
-      const affiliates = [...new Set(allLeads.map((l) => l.affiliate))];
-      affiliates.forEach((a) => {
-        const opt = document.createElement("option");
-        opt.value = a;
-        opt.textContent = a;
-        affiliateFilter.appendChild(opt);
-      });
-
-      applyFilters();
-    });
-
-  function applyFilters() {
-    const query = searchInput.value.toLowerCase();
-    const status = statusFilter.value;
-    const affiliate = affiliateFilter.value;
-
-    filteredLeads = allLeads.filter((lead) => {
-      const matchesQuery =
-        lead.firstName.toLowerCase().includes(query) ||
-        lead.lastName.toLowerCase().includes(query) ||
-        lead.email.toLowerCase().includes(query) ||
-        lead.phone.includes(query);
-
-      const matchesStatus = status ? lead.status === status : true;
-      const matchesAffiliate = affiliate ? lead.affiliate === affiliate : true;
-
-      return matchesQuery && matchesStatus && matchesAffiliate;
-    });
-
-    currentPage = 1;
-    renderLeads();
-    renderPagination();
-  }
-
-  function renderLeads() {
-    leadsContainer.innerHTML = "";
-
-    const start = (currentPage - 1) * leadsPerPage;
-    const paginatedLeads = filteredLeads.slice(start, start + leadsPerPage);
-
-    if (paginatedLeads.length === 0) {
-      leadsContainer.innerHTML = `<p class="no-data">No leads found.</p>`;
-      return;
-    }
-
-    paginatedLeads.forEach((lead) => {
-      const leadEl = document.createElement("div");
-      leadEl.className = "lead-item";
-      leadEl.innerHTML = `
-        <div class="lead-main">
-          <strong class="lead-name" data-id="${lead.id}">${lead.firstName} ${lead.lastName}</strong>
-          <span>${lead.phone}</span>
-          <span>${lead.email}</span>
-        </div>
-        <div class="lead-meta">
-          <span>${lead.country}</span>
-          <span>${lead.affiliate}</span>
-          <span>${lead.date}</span>
-          <span class="lead-status">${lead.status}</span>
-        </div>
-      `;
-      leadsContainer.appendChild(leadEl);
-    });
-
-    // Клик по имени — переход в карточку
-    document.querySelectorAll(".lead-name").forEach((el) => {
-      el.addEventListener("click", () => {
-        const leadId = el.getAttribute("data-id");
-        localStorage.setItem("selectedLeadId", leadId);
-        window.location.href = "client-card.html";
-      });
-    });
-  }
-
-  function renderPagination() {
-    paginationControls.innerHTML = "";
-    const totalPages = Math.ceil(filteredLeads.length / leadsPerPage);
-    if (totalPages <= 1) return;
-
-    for (let i = 1; i <= totalPages; i++) {
-      const btn = document.createElement("button");
-      btn.textContent = i;
-      btn.className = i === currentPage ? "active" : "";
-      btn.addEventListener("click", () => {
-        currentPage = i;
-        renderLeads();
-        renderPagination();
-      });
-      paginationControls.appendChild(btn);
-    }
-  }
-
-  // Фильтры
-  searchInput.addEventListener("input", applyFilters);
-  statusFilter.addEventListener("change", applyFilters);
-  affiliateFilter.addEventListener("change", applyFilters);
-
-  // Выход
-  document.getElementById("logout").addEventListener("click", () => {
-    localStorage.clear();
-    window.location.href = "index.html";
-  });
-});
-const bellButton = document.getElementById("bellButton");
-const reminderDropdown = document.getElementById("reminderList");
-const reminderItems = document.getElementById("reminderItems");
-const noRemindersText = document.querySelector(".no-reminders");
-
-if (bellButton && reminderDropdown && reminderItems && noRemindersText) {
-  bellButton.addEventListener("click", () => {
-    reminderDropdown.classList.toggle("show");
-
-    reminderItems.innerHTML = "";
-
-    const reminders = JSON.parse(localStorage.getItem("reminders") || "[]");
-
-    if (reminders.length === 0) {
-      noRemindersText.style.display = "block";
-      return;
-    }
-
-    noRemindersText.style.display = "none";
-
-    reminders.forEach(rem => {
-      const li = document.createElement("li");
-      const link = document.createElement("a");
-      link.href = `client-card.html?id=${rem.id}`;
-      link.textContent = `${rem.name} — ${rem.date}${rem.comment ? ` (${rem.comment})` : ""}`;
-      li.appendChild(link);
-      reminderItems.appendChild(li);
-    });
+// Заполняем список аффилиатов
+function populateAffiliateFilter() {
+  const affiliates = [...new Set(leads.map(lead => lead.affiliate))];
+  affiliateFilter.innerHTML = `<option value="">All Affiliates</option>`;
+  affiliates.forEach(aff => {
+    affiliateFilter.innerHTML += `<option value="${aff}">${aff}</option>`;
   });
 }
+
+// Фильтрация и отрисовка
+function applyFilters() {
+  const search = searchInput.value.toLowerCase();
+  const status = statusFilter.value;
+  const affiliate = affiliateFilter.value;
+
+  filteredLeads = leads.filter(lead => {
+    const fullText = `${lead.firstName} ${lead.lastName} ${lead.email} ${lead.phone}`.toLowerCase();
+    const matchesSearch = fullText.includes(search);
+    const matchesStatus = !status || lead.status === status;
+    const matchesAffiliate = !affiliate || lead.affiliate === affiliate;
+    return matchesSearch && matchesStatus && matchesAffiliate;
+  });
+
+  currentPage = 1;
+  renderLeads();
+}
+
+function renderLeads() {
+  const start = (currentPage - 1) * leadsPerPage;
+  const end = start + leadsPerPage;
+  const leadsToShow = filteredLeads.slice(start, end);
+
+  leadsList.innerHTML = leadsToShow.map(lead => `
+    <div class="lead-card" onclick="openClientModal(${lead.id})">
+      <div><strong>${lead.firstName} ${lead.lastName}</strong></div>
+      <div>${lead.email}</div>
+      <div>${lead.phone}</div>
+      <div>Status: ${lead.status}</div>
+      <div>Affiliate: ${lead.affiliate}</div>
+    </div>
+  `).join("");
+}
+
+// Открытие карточки
+function openClientModal(id) {
+  selectedLead = leads.find(lead => lead.id === id);
+  if (!selectedLead) return;
+
+  document.getElementById("clientName").textContent = `${selectedLead.firstName} ${selectedLead.lastName}`;
+  document.getElementById("clientEmail").textContent = selectedLead.email;
+  document.getElementById("clientPhone").textContent = selectedLead.phone;
+  document.getElementById("clientCountry").textContent = selectedLead.country;
+  document.getElementById("clientDate").textContent = selectedLead.dateAdded;
+  document.getElementById("clientAffiliate").textContent = selectedLead.affiliate;
+
+  document.getElementById("reminderDate").value = selectedLead.reminder || "";
+  document.getElementById("reminderComment").value = selectedLead.comment || "";
+  document.getElementById("statusSelect").value = selectedLead.status;
+
+  clientModal.style.display = "flex";
+}
+
+// Сохранение
+function saveClientChanges() {
+  if (!selectedLead) return;
+
+  selectedLead.reminder = document.getElementById("reminderDate").value;
+  selectedLead.comment = document.getElementById("reminderComment").value;
+  selectedLead.status = document.getElementById("statusSelect").value;
+
+  closeClientModal();
+  renderLeads();
+}
+
+// Закрытие
+function closeClientModal() {
+  clientModal.style.display = "none";
+  selectedLead = null;
+}
+
+// Слушатели
+searchInput.addEventListener("input", applyFilters);
+statusFilter.addEventListener("change", applyFilters);
+affiliateFilter.addEventListener("change", applyFilters);
+paginationSelect.addEventListener("change", () => {
+  leadsPerPage = parseInt(paginationSelect.value);
+  currentPage = 1;
+  renderLeads();
+});
+
+// Инициализация
+populateAffiliateFilter();
+applyFilters();

@@ -98,7 +98,7 @@
 <body class="login-body">
   <div class="login-container">
     <div class="login-card">
-      <h2 class="login-title">Welcome to CRM</h2>
+      <h2 class="login-title" data-i18n="welcome">Welcome to CRM</h2>
       
       <select id="lang-select">
         <option value="en">🌐 English</option>
@@ -115,13 +115,13 @@
         <input type="password" id="password" placeholder="Password" />
       </div>
 
-      <button class="login-btn" onclick="login()">Login</button>
+      <button class="login-btn" onclick="login()" data-i18n="login">Login</button>
 
       <p class="login-error" id="login-error" style="display: none;"></p>
     </div>
   </div>
 
-  <script src="translations.js"></script>
+  <script src="js/translations.js"></script>
   <script>
     const langSelect = document.getElementById("lang-select");
     const loginError = document.getElementById("login-error");
@@ -135,8 +135,10 @@
     function login() {
       const user = document.getElementById("username").value.trim();
       const pass = document.getElementById("password").value.trim();
+      const lang = localStorage.getItem("lang") || "en";
+
       if (!user || !pass) {
-        loginError.innerText = "Please enter credentials";
+        loginError.innerText = translations[lang]["enterCredentials"];
         loginError.style.display = "block";
         return;
       }
@@ -148,12 +150,11 @@
         localStorage.setItem("role", "manager");
         window.location.href = "home.html";
       } else {
-        loginError.innerText = "Invalid login or password";
+        loginError.innerText = translations[lang]["invalidLogin"];
         loginError.style.display = "block";
       }
     }
 
-    // авто-перевод при входе
     const savedLang = localStorage.getItem("lang") || "en";
     langSelect.value = savedLang;
     translatePage(savedLang);

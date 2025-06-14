@@ -3,94 +3,193 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CRM Dashboard</title>
+  <title>CRM Home</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" />
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml" />
+  <link href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6fb;
+      color: #333;
+    }
+
+    .sidebar {
+      width: 240px;
+      height: 100vh;
+      background: #ffffff;
+      border-right: 1px solid #ddd;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 20px;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+    }
+
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar nav a {
+      display: block;
+      padding: 12px;
+      color: #333;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      transition: background 0.3s;
+    }
+
+    .sidebar nav a:hover {
+      background-color: #eaf0ff;
+    }
+
+    .topbar {
+      margin-left: 240px;
+      height: 60px;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      border-bottom: 1px solid #ddd;
+      position: relative;
+    }
+
+    .topbar .welcome {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+
+    .notification-bell {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .notification-count {
+      position: absolute;
+      top: -6px;
+      right: -8px;
+      background: red;
+      color: white;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .notification-list {
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      padding: 10px;
+      width: 280px;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1000;
+    }
+
+    .notification-list .note {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .notification-list .note:hover {
+      background-color: #f9f9f9;
+    }
+
+    main {
+      margin-left: 240px;
+      padding: 20px;
+    }
+  </style>
 </head>
-<body class="dashboard-body">
-
-  <div class="sidebar">
-    <div class="logo">CRM</div>
+<body>
+  <aside class="sidebar">
+    <h2><i class="lucide lucide-layout-dashboard"></i> CRM</h2>
     <nav>
-      <ul>
-        <li class="nav-item active"><i class="fas fa-home"></i><span>Home</span></li>
-        <li class="nav-item"><i class="fas fa-user-friends"></i><span>Leads</span></li>
-        <li class="nav-item"><i class="fas fa-cogs"></i><span>Admin</span></li>
-        <li class="nav-item logout"><i class="fas fa-sign-out-alt"></i><span>Logout</span></li>
-      </ul>
+      <a href="leads.html" data-i18n="leads">Leads</a>
+      <a href="admin.html" id="admin-link" data-i18n="admin" style="display: none;">Admin Panel</a>
+      <a href="settings.html" id="settings-link" data-i18n="settings" style="display: none;">Settings</a>
+      <a href="index.html" data-i18n="logout">Logout</a>
     </nav>
-  </div>
+  </aside>
 
-  <div class="main">
-    <header class="main-header">
-      <div class="welcome-text">
-        <h1>Welcome back, <span id="username-display">Manager</span>!</h1>
-        <p>Have a productive day.</p>
+  <header class="topbar">
+    <div class="welcome" id="welcome-msg">Welcome!</div>
+    <div class="actions">
+      <div class="notification-bell" onclick="toggleNotifications()">
+        <i class="lucide lucide-bell"></i>
+        <span class="notification-count" id="notificationCount">0</span>
+        <div class="notification-list" id="notificationList"></div>
       </div>
-      <div class="header-icons">
+      <select id="lang-select">
+        <option value="en">EN</option>
+        <option value="ru">RU</option>
+      </select>
+    </div>
+  </header>
 
-        <!-- ✅ Колокольчик с напоминаниями -->
-        <div class="notifications">
-          <button id="bellButton">
-            <img src="img/bell.svg" alt="Reminders" />
-          </button>
-          <div id="reminderList" class="reminder-dropdown hidden">
-            <h4>Reminders</h4>
-            <ul id="reminderItems"></ul>
-            <p class="no-reminders">No reminders</p>
-          </div>
-        </div>
+  <main>
+    <h1 data-i18n="dashboard">Dashboard</h1>
+    <p data-i18n="dashboardWelcome">Use the menu to navigate through the CRM system.</p>
+  </main>
 
-        <select id="lang-select" onchange="translatePage(this.value)">
-          <option value="en">EN</option>
-          <option value="ru">RU</option>
-        </select>
-      </div>
-    </header>
-
-    <main class="main-content">
-      <div class="dashboard-info">
-        <p>This is your CRM dashboard. Use the side menu to navigate.</p>
-      </div>
-    </main>
-  </div>
-
-  <script src="translations.js"></script>
+  <script src="js/translations.js"></script>
+  <script src="js/reminder.js"></script> <!-- подключи файл reminder.js с логикой -->
   <script>
-    // Перевод
     const langSelect = document.getElementById("lang-select");
-    translatePage(langSelect.value);
+    const savedLang = localStorage.getItem("lang") || "en";
+    langSelect.value = savedLang;
+    translatePage(savedLang);
 
-    // ✅ Логика колокольчика
-    const bellButton = document.getElementById("bellButton");
-    const reminderDropdown = document.getElementById("reminderList");
-    const reminderItems = document.getElementById("reminderItems");
-    const noRemindersText = document.querySelector(".no-reminders");
+    langSelect.addEventListener("change", () => {
+      const newLang = langSelect.value;
+      localStorage.setItem("lang", newLang);
+      translatePage(newLang);
+    });
 
-    if (bellButton && reminderDropdown && reminderItems && noRemindersText) {
-      bellButton.addEventListener("click", () => {
-        reminderDropdown.classList.toggle("hidden");
-        reminderItems.innerHTML = "";
+    const role = localStorage.getItem("role");
+    const welcomeMsg = document.getElementById("welcome-msg");
 
-        const reminders = JSON.parse(localStorage.getItem("reminders") || "[]");
+    if (role === "admin") {
+      document.getElementById("admin-link").style.display = "block";
+      welcomeMsg.innerText = savedLang === "ru" ? "Добро пожаловать, Админ!" : "Welcome, Admin!";
+    } else if (role === "manager") {
+      welcomeMsg.innerText = savedLang === "ru" ? "Добро пожаловать, Менеджер!" : "Welcome, Manager!";
+    } else {
+      location.href = "index.html";
+    }
 
-        if (reminders.length === 0) {
-          noRemindersText.style.display = "block";
-          return;
-        }
+    const hasSettingsAccess = localStorage.getItem("settingsAccess") === "true";
+    if (hasSettingsAccess) {
+      document.getElementById("settings-link").style.display = "block";
+    }
 
-        noRemindersText.style.display = "none";
-
-        reminders.forEach(rem => {
-          const li = document.createElement("li");
-          const link = document.createElement("a");
-          link.href = `client-card.html?id=${rem.id}`;
-          link.textContent = `${rem.name} — ${rem.date}${rem.comment ? ` (${rem.comment})` : ""}`;
-          li.appendChild(link);
-          reminderItems.appendChild(li);
-        });
-      });
+    // Toggle отображение списка напоминаний
+    function toggleNotifications() {
+      const list = document.getElementById("notificationList");
+      list.style.display = list.style.display === "block" ? "none" : "block";
     }
   </script>
+  <script src="js/reminder.js"></script>
 </body>
 </html>

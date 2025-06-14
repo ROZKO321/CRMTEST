@@ -1,429 +1,560 @@
-/* ====== Общие стили ====== */
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
+  padding: 0;
+}
+
+body {
   font-family: 'Segoe UI', sans-serif;
-  background: #f8f9fc;
+  background-color: #f7f8fa;
   color: #333;
+  display: flex;
+  min-height: 100vh;
 }
 
-.hidden {
-  display: none !important;
-}
-
-/* ====== Sidebar ====== */
+/* Sidebar */
 .sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
   width: 220px;
-  height: 100vh;
-  background: #4e73df;
-  color: white;
+  background-color: #ffffff;
+  padding: 25px 20px;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding-top: 20px;
+  gap: 18px;
+  border-right: 1px solid #eee;
 }
 
-.sidebar .logo {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 30px;
-}
-
-.sidebar nav ul {
-  list-style: none;
-  padding: 0;
-  width: 100%;
-}
-
-.sidebar nav ul li {
-  padding: 15px 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: background 0.3s;
-}
-
-.sidebar nav ul li:hover,
-.sidebar nav ul li.active {
-  background: #2e59d9;
-}
-
-.sidebar nav ul li i {
-  margin-right: 10px;
-}
-
-/* ====== Header ====== */
-.main-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-  margin-left: 220px;
-}
-
-.welcome-text h1 {
-  margin: 0 0 5px 0;
-  font-size: 22px;
-}
-
-.welcome-text p {
-  margin: 0;
-  color: #666;
-}
-
-.header-icons {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-#lang-select {
-  padding: 6px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-/* ====== Main ====== */
-.main {
-  margin-left: 220px;
-  padding: 20px;
-}
-
-.main-content {
-  margin-top: 20px;
-  background: white;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-}
-
-.dashboard-info {
-  font-size: 16px;
+.sidebar a {
+  text-decoration: none;
   color: #444;
+  padding: 10px 14px;
+  border-radius: 8px;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-/* ====== Notifications / Bell ====== */
-.notifications {
-  position: relative;
-  margin-right: 15px;
+.sidebar a:hover {
+  background-color: #f0f0f0;
 }
 
-#bellButton {
+.sidebar .logout {
+  margin-top: auto;
+  padding: 10px 14px;
+  background: #ff4d4d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sidebar .logout:hover {
+  background: #e64545;
+}
+
+/* Main content */
+.main {
+  flex: 1;
+  padding: 30px;
+}
+
+/* Bell button */
+.bell {
+  font-size: 20px;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
-  color: #333;
 }
 
-#bellButton i,
-#bellButton img {
-  width: 22px;
-  height: 22px;
+/* Filters */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
 }
 
-.reminder-dropdown {
-  position: absolute;
-  right: 0;
-  top: 35px;
-  width: 260px;
-  background: white;
+.filters input,
+.filters select {
+  padding: 8px 12px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-  z-index: 1000;
-}
-
-.reminder-dropdown h4 {
-  margin: 0 0 10px;
-  font-size: 16px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
-}
-
-.reminder-dropdown ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-height: 220px;
-  overflow-y: auto;
-}
-
-.reminder-dropdown li {
+  border-radius: 6px;
   font-size: 14px;
-  margin-bottom: 6px;
-}
-
-.reminder-dropdown a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.reminder-dropdown a:hover {
-  text-decoration: underline;
-}
-
-.no-reminders {
-  text-align: center;
-  font-size: 13px;
-  color: #999;
-  margin-top: 10px;
-}
-/* ====== Login Page ====== */
-body.login-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: #f1f4f9;
-}
-
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.login-card {
   background: #fff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  width: 320px;
-  text-align: center;
 }
 
-.login-title {
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: 600;
-}
-
-#lang-select {
-  margin-bottom: 20px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  width: 100%;
-  font-size: 14px;
-}
-
-.login-field {
+/* Leads container */
+.leads-container {
   display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 10px;
-  background: #f9f9f9;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.login-field i {
-  margin-right: 10px;
+/* Lead Card */
+.lead-card {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  gap: 20px;
+}
+
+.lead-left {
+  width: 50%;
+  line-height: 1.6;
+}
+
+.lead-right {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lead-right input[type="datetime-local"],
+.lead-right input[type="text"],
+.lead-right textarea,
+.lead-right select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #f9f9f9;
+  resize: none;
+}
+
+.lead-right textarea {
+  min-height: 60px;
+}
+
+.lead-right button {
+  padding: 8px 14px;
+  border: none;
+  background: #4a90e2;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.lead-right button:hover {
+  background: #3f7ecb;
+}
+
+/* Reminders box */
+.reminders-list {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-top: 15px;
+  max-width: 400px;
+}
+
+.reminders-list .reminder-item {
+  border-bottom: 1px solid #eee;
+  padding: 8px 0;
+}
+
+.reminders-list .reminder-item:last-child {
+  border-bottom: none;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .lead-card {
+    flex-direction: column;
+  }
+
+  .lead-left,
+  .lead-right {
+    width: 100%;
+  }
+
+  .sidebar {
+    width: 180px;
+  }
+}
+/* ===== LEADS ===== */
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  justify-content: space-between;
+}
+
+.filters-container input,
+.filters-container select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  min-width: 160px;
+  background: #fff;
+}
+
+.filters-container select:focus,
+.filters-container input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+#leadsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lead-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.lead-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.lead-card strong.clickable {
+  font-size: 16px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.lead-card small {
+  display: block;
+  font-size: 13px;
   color: #555;
 }
 
-.login-field input {
-  border: none;
-  background: transparent;
-  flex: 1;
-  font-size: 14px;
-  outline: none;
-}
-
-.login-btn {
-  background: #007bff;
-  color: white;
-  padding: 10px;
+/* ===== CLIENT CARD MODAL ===== */
+#clientCardModal {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background 0.3s;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 
-.login-btn:hover {
-  background: #0056b3;
+.client-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 14px;
+  width: 600px;
+  max-width: 90%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
 }
 
-.login-error {
-  color: red;
-  margin-top: 10px;
+.client-info p {
+  margin: 4px 0;
   font-size: 14px;
 }
 
-/* ====== Client Card ====== */
-.client-card-container {
-  display: flex;
-  gap: 40px;
-  background: white;
-  padding: 40px;
-  border-radius: 8px;
-  margin: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-.client-info {
-  flex: 1;
-  font-size: 15px;
-}
-
-.client-info h2 {
-  margin-bottom: 10px;
-}
-
-.client-actions {
-  flex: 1;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  font-weight: 600;
+.client-actions label {
   display: block;
-  margin-bottom: 6px;
+  margin-top: 12px;
+  font-weight: 500;
+  font-size: 14px;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.client-actions input,
+.client-actions textarea,
+.client-actions select {
   width: 100%;
-  padding: 8px;
-  border-radius: 6px;
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 14px;
-  font-family: inherit;
 }
 
-.form-group textarea {
+.client-actions textarea {
   resize: vertical;
   min-height: 60px;
 }
 
-button#saveStatus,
-button#saveComment,
-button#setReminder {
-  padding: 10px 15px;
-  background: #4e73df;
-  color: white;
+.modal-buttons {
+  grid-column: span 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-buttons button {
+  padding: 10px 20px;
+  border-radius: 8px;
   border: none;
-  border-radius: 6px;
+  font-weight: 500;
   cursor: pointer;
-  margin-top: 8px;
+  font-size: 14px;
+}
+
+.modal-buttons .save-btn {
+  background: #28a745;
+  color: #fff;
+}
+
+.modal-buttons .cancel-btn {
+  background: #ccc;
+  color: #333;
+}
+.notification-bell-container {
+  position: relative;
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+.notification-bell {
+  position: relative;
+  cursor: pointer;
+  font-size: 24px;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.notification-bell:hover {
+  color: #007bff;
+}
+
+.notification-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: red;
+  color: white;
+  font-size: 11px;
+  padding: 2px 5px;
+  border-radius: 50%;
+}
+
+.notification-list {
+  display: none;
+  position: absolute;
+  top: 36px;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.notification-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  background: #f5f5f5;
+}
+/* 🔔 Уведомления (колокольчик) */
+.notification-list {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  width: 320px;
+  max-height: 400px;
+  background: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  overflow-y: auto;
+  z-index: 100;
+  padding: 10px;
+}
+
+.notification-list .notification {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.notification-list .notification:last-child {
+  border-bottom: none;
+}
+
+.notification-list .notification:hover {
+  background-color: #f3f7ff;
+}
+
+/* 🧾 Список лидов */
+#leadsList {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lead-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  transition: box-shadow 0.3s;
+}
+
+.lead-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.lead-left {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.lead-left strong {
+  font-weight: 600;
+}
+
+.lead-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 220px;
+}
+
+.lead-right textarea,
+.lead-right select,
+.lead-right input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.lead-right textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.lead-right button {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
   transition: background 0.3s;
 }
 
-button:hover {
-  background: #2e59d9;
+.lead-right button:hover {
+  background: #2563eb;
 }
 
-/* ====== Admin Panel ====== */
-.admin-panel {
-  background: white;
-  margin: 20px;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.admin-panel h2 {
-  margin-bottom: 20px;
-  font-size: 20px;
-}
-
-.admin-form {
+/* 🎛️ Фильтры */
+.filters-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-.admin-form .form-group {
-  flex: 1 1 45%;
-}
-
-.admin-form .form-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.admin-form .form-group input,
-.admin-form .form-group select {
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
+.filters-container input,
+.filters-container select {
+  padding: 8px 12px;
   border: 1px solid #ccc;
+  border-radius: 8px;
   font-size: 14px;
 }
 
-.admin-form button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background: #1cc88a;
-  color: white;
-  border: none;
-  border-radius: 6px;
+/* 🧍 Модалка клиента */
+#clientCardModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.client-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 30px;
+  max-width: 700px;
+  width: 90%;
+  display: flex;
+  gap: 30px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.client-info {
+  flex: 1;
   font-size: 14px;
+}
+
+.client-actions {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.cancel-btn,
+.save-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-.admin-form button:hover {
-  background: #17a673;
+.cancel-btn {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
 }
 
-.admin-logs {
-  margin-top: 30px;
+.save-btn {
+  background: #4caf50;
+  color: #fff;
+  border: none;
 }
 
-.admin-logs h3 {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.admin-logs pre {
-  background: #f8f9fc;
-  padding: 15px;
-  border-radius: 6px;
-  max-height: 300px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  font-size: 13px;
-  color: #333;
-}
-
-/* ====== Push Reminder Toast ====== */
-.reminder-toast {
-  position: fixed;
-  bottom: 30px;
-  left: 30px;
-  background-color: #fff;
-  color: #333;
-  padding: 15px 20px;
-  border-radius: 10px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-  border-left: 6px solid #4e73df;
-  font-size: 14px;
-  z-index: 9999;
-  display: none;
-  animation: fadeInUp 0.4s ease forwards;
-}
-
-@keyframes fadeInUp {
-  0% {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.save-btn:hover {
+  background: #45a049;
 }
