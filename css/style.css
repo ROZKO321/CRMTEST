@@ -454,3 +454,25 @@ body.dark #reminderPopup {
   padding: 4px;
   border-bottom: 1px solid #eee;
 }
+#bell {
+  cursor: pointer;
+  font-size: 18px;
+  padding: 6px;
+}
+
+#reminderPopup {
+  position: absolute;
+  right: 0;
+  top: 32px;
+  width: 280px;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  display: none;
+}
+
+#reminderPopup.visible {
+  display: block;
+}
