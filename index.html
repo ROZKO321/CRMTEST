@@ -3,10 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CRM Вход</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="img/logo.svg" type="image/svg+xml" />
-  <link href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.css" rel="stylesheet">
+  <title>CRM | Вход</title>
+  <link rel="stylesheet" href="css/style.css" />
   <style>
     body.login-body {
       margin: 0;
@@ -20,110 +18,82 @@
     }
 
     .login-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .login-card {
       background: #fff;
-      padding: 40px;
+      padding: 40px 30px;
       border-radius: 12px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-      width: 320px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 400px;
       text-align: center;
     }
 
-    .login-title {
-      margin-bottom: 20px;
+    .login-container h2 {
+      margin-bottom: 25px;
       font-size: 24px;
       font-weight: 600;
+      color: #222;
     }
 
-    .login-field {
-      display: flex;
-      align-items: center;
+    .login-container input {
+      width: 100%;
+      padding: 12px;
       margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 6px;
-      padding: 10px;
-      background: #f9f9f9;
+      font-size: 16px;
+      transition: 0.3s;
     }
 
-    .login-field i {
-      margin-right: 10px;
-      color: #555;
-    }
-
-    .login-field input {
-      border: none;
-      background: transparent;
-      flex: 1;
-      font-size: 14px;
+    .login-container input:focus {
+      border-color: #007bff;
       outline: none;
     }
 
-    .login-btn {
-      background: #007bff;
-      color: white;
-      padding: 10px;
+    .login-container button {
       width: 100%;
+      padding: 12px;
+      background-color: #007bff;
       border: none;
       border-radius: 6px;
-      font-size: 15px;
+      color: white;
+      font-size: 16px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background-color 0.3s ease;
     }
 
-    .login-btn:hover {
-      background: #0056b3;
-    }
-
-    .login-error {
-      color: red;
-      margin-top: 10px;
-      font-size: 14px;
+    .login-container button:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body class="login-body">
   <div class="login-container">
-    <div class="login-card">
-      <h2 class="login-title">Добро пожаловать в CRM</h2>
-
-      <div class="login-field">
-        <i class="lucide lucide-user"></i>
-        <input type="text" id="username" placeholder="Имя пользователя" />
-      </div>
-
-      <div class="login-field">
-        <i class="lucide lucide-lock"></i>
-        <input type="password" id="password" placeholder="Пароль" />
-      </div>
-
-      <button class="login-btn" type="button" onclick="login()">Войти</button>
-
-      <p class="login-error" id="login-error" style="display: none;"></p>
-    </div>
+    <h2>Добро пожаловать в CRM</h2>
+    <input type="text" id="username" placeholder="Логин" />
+    <input type="password" id="password" placeholder="Пароль" />
+    <button onclick="login()">Войти</button>
   </div>
- <script>
-  function login() {
-    const user = document.getElementById("username").value.trim();
-    const pass = document.getElementById("password").value.trim();
 
-    if (!user || !pass) {
-      alert("Введите логин и пароль");
-      return;
-    }
+  <script>
+    function login() {
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
 
-    if (user === "admin" && pass === "admin") {
-      localStorage.setItem("currentUser", JSON.stringify({ role: "admin", username: user }));
-      window.location.href = "home.html";
-    } else if (user.startsWith("mgr") && pass === "123") {
-      localStorage.setItem("currentUser", JSON.stringify({ role: "manager", username: user }));
-      window.location.href = "home.html";
-    } else {
-      alert("Неверный логин или пароль");
+      if (!user || !pass) {
+        alert("Введите логин и пароль");
+        return;
+      }
+
+      if (user === "admin" && pass === "admin") {
+        localStorage.setItem("currentUser", JSON.stringify({ role: "admin", username: user }));
+        window.location.href = "home.html";
+      } else if (user.startsWith("mgr") && pass === "123") {
+        localStorage.setItem("currentUser", JSON.stringify({ role: "manager", username: user }));
+        window.location.href = "home.html";
+      } else {
+        alert("Неверный логин или пароль");
+      }
     }
-  }
-</script>
+  </script>
+</body>
+</html>
