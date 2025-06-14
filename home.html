@@ -1,0 +1,20 @@
+<div class="welcome-box">
+  <h1>Welcome to Coldi Production CRM 👋</h1>
+  <p class="subline">Manage your leads efficiently. Stay organized. Stay productive.</p>
+  <div class="motto-box">
+    <em>“Success is not final, failure is not fatal: it is the courage to continue that counts.”</em>
+    <br/>
+    — Winston Churchill
+  </div>
+</div>
+
+<script>
+  function initHomePage() {
+    const user = JSON.parse(localStorage.getItem("crmCurrentUser"));
+    if (user) {
+      console.log("Loaded home for:", user.login);
+    } else {
+      window.location.href = "login.html";
+    }
+  }
+</script>

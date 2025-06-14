@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CRM Coldi</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="img/logo.png" alt="CRM Logo" class="logo"/>
+        <span class="crm-title">CRM</span>
+      </div>
+      <ul class="nav-links">
+        <li class="nav-item" data-page="home.html">
+          <i class="fa-solid fa-house"></i>
+          <span data-i18n="menu.home">Главная</span>
+        </li>
+        <li class="nav-item" data-page="leads.html">
+          <i class="fa-solid fa-address-card"></i>
+          <span data-i18n="menu.leads">Лиды</span>
+        </li>
+        <li class="nav-item admin-only" data-page="settings.html">
+          <i class="fa-solid fa-gear"></i>
+          <span data-i18n="menu.settings">Настройки</span>
+        </li>
+        <li id="logoutBtn">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span data-i18n="menu.logout">Выход</span>
+        </li>
+      </ul>
+      <button id="toggleSidebar"><i class="fa-solid fa-bars"></i></button>
+    </aside>
+
+    <!-- Main content -->
+    <div class="content">
+      <header class="top-panel">
+        <div class="controls">
+          <button id="themeToggle"><i class="fa-solid fa-circle-half-stroke"></i></button>
+          <select id="languageToggle">
+            <option value="en">EN</option>
+            <option value="ru">RU</option>
+          </select>
+        </div>
+        <div class="notifications">
+          <span id="bell" title="Напоминания"><i class="fa-solid fa-bell"></i></span>
+          <div id="reminderPopup" class="hidden"></div>
+        </div>
+      </header>
+
+      <main id="appWrapper"></main>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="js/sidebar.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/reminders.js"></script>
+  <script src="js/audio.js"></script>
+</body>
+</html>
