@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Карточка клиента</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body style="padding: 30px; font-family: sans-serif;">
+  <div id="clientCard">
+    <h2>Загрузка...</h2>
+  </div>
+
+  <script>
+    const clientId = localStorage.getItem("openClientId");
+    const clients = JSON.parse(localStorage.getItem("crmClients") || "[]");
+    const client = clients.find(c => c.id == clientId);
+
+    const card = document.getElementById("clientCard");
+
+    if (client) {
+      card.innerHTML = `
+        <h2>${client.name} ${client.surname}</h2>
+        <p><strong>📞 Телефон:</strong> ${client.phone}</p>
+        <p><strong>✉️ Email:</strong> ${client.email}</p>
+        <p><strong>🌍 Страна:</strong> ${client.country}</p>
+        <p><strong>🏷️ Аффилиат:</strong> ${client.affiliate}</p>
+        <p><strong>📦 Статус:</strong> ${client.status}</p>
+        <p><strong>💬 Комментарий:</strong> ${client.comment || "-"}</p>
+        <p><strong>🕒 Загружен:</strong> ${new Date(client.createdAt).toLocaleString()}</p>
+        <p><strong>👤 Менеджер:</strong> ${client.manager}</p>
+      `;
+    } else {
+      card.innerHTML = "<h3>Клиент не найден</h3>";
+    }
+  </script>
+</body>
+</html>

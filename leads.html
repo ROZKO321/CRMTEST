@@ -1,0 +1,147 @@
+<div class="leads-controls">
+  <input type="text" id="searchInput" placeholder="Поиск по имени, email или телефону" />
+  <select id="statusFilter">
+    <option value="">Все статусы</option>
+    <option value="new">Новый</option>
+    <option value="in-work">В работе</option>
+    <option value="done">Закрыт</option>
+  </select>
+  <select id="affiliateFilter">
+    <option value="">Все аффилиаты</option>
+  </select>
+  <select id="perPageSelect">
+    <option>10</option>
+    <option>20</option>
+    <option>30</option>
+    <option>50</option>
+    <option>100</option>
+  </select>
+</div>
+
+<div id="leadsList"></div>
+<div id="paginationControls"></div>
+
+<script>
+function initLeads() {
+  const currentUser = JSON.parse(localStorage.getItem("crmCurrentUser"));
+  const leadsList = document.getElementById("leadsList");
+  const paginationControls = document.getElementById("paginationControls");
+  const searchInput = document.getElementById("searchInput");
+  const statusFilter = document.getElementById("statusFilter");
+  const affiliateFilter = document.getElementById("affiliateFilter");
+  const perPageSelect = document.getElementById("perPageSelect");
+
+  let currentPage = 1;
+
+  const render = () => {
+    const all = JSON.parse(localStorage.getItem("crmClients")) || [];
+    const clients = currentUser.role === "admin" ? all : all.filter(c => c.manager === currentUser.login);
+
+    const filtered = clients.filter(c => {
+      const q = searchInput.value.toLowerCase();
+      return (
+        (!statusFilter.value || c.status === statusFilter.value) &&
+        (!affiliateFilter.value || c.affiliate === affiliateFilter.value) &&
+        (
+          c.name.toLowerCase().includes(q) ||
+          c.surname.toLowerCase().includes(q) ||
+          c.email.toLowerCase().includes(q) ||
+          c.phone.toLowerCase().includes(q)
+        )
+      );
+    });
+
+    const perPage = +perPageSelect.value;
+    const start = (currentPage - 1) * perPage;
+    const pageClients = filtered.slice(start, start + perPage);
+
+    leadsList.innerHTML = pageClients.map(c => `
+      <div class="lead-card">
+        <div class="lead-left">
+          <strong>${c.name} ${c.surname}</strong><br/>
+          📞 ${c.phone} <br/>
+          ✉️ ${c.email} <br/>
+          🌍 ${c.country} <br/>
+          🏷️ ${c.affiliate || "Без аффилиата"} <br/>
+          🕒 ${new Date(c.createdAt || Date.now()).toLocaleDateString()}
+        </div>
+        <div class="lead-right">
+          <label>Напоминание:
+            <input type="datetime-local" onchange="saveReminder(${c.id}, this.value)" />
+            <input type="text" placeholder="Комментарий" onchange="saveReminderComment(${c.id}, this.value)" />
+          </label>
+          <label>Комментарий:
+            <textarea onchange="saveLeadComment(${c.id}, this.value)">${c.comment || ""}</textarea>
+          </label>
+          <label>Статус:
+            <select onchange="saveStatus(${c.id}, this.value)">
+              <option value="new" ${c.status === "new" ? "selected" : ""}>Новый</option>
+              <option value="in-work" ${c.status === "in-work" ? "selected" : ""}>В работе</option>
+              <option value="done" ${c.status === "done" ? "selected" : ""}>Закрыт</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    `).join("");
+
+    const totalPages = Math.ceil(filtered.length / perPage);
+    paginationControls.innerHTML = Array.from({ length: totalPages }, (_, i) => `
+      <button ${i + 1 === currentPage ? 'disabled' : ''} onclick="goToPage(${i + 1})">${i + 1}</button>
+    `).join("");
+  };
+
+  window.goToPage = page => {
+    currentPage = page;
+    render();
+  };
+
+  window.saveReminder = (id, date) => {
+    const clients = JSON.parse(localStorage.getItem("crmClients")) || [];
+    const idx = clients.findIndex(c => c.id === id);
+    if (!clients[idx].reminders) clients[idx].reminders = [];
+    const last = clients[idx].reminders.at(-1);
+    const comment = last?.comment || clients[idx].comment || "";
+    clients[idx].reminders.push({ datetime: date, comment });
+    localStorage.setItem("crmClients", JSON.stringify(clients));
+    render();
+  };
+
+  window.saveReminderComment = (id, text) => {
+    const clients = JSON.parse(localStorage.getItem("crmClients")) || [];
+    const idx = clients.findIndex(c => c.id === id);
+    const r = clients[idx].reminders?.at(-1);
+    if (r) r.comment = text;
+    localStorage.setItem("crmClients", JSON.stringify(clients));
+  };
+
+  window.saveLeadComment = (id, text) => {
+    const clients = JSON.parse(localStorage.getItem("crmClients")) || [];
+    const idx = clients.findIndex(c => c.id === id);
+    clients[idx].comment = text;
+    localStorage.setItem("crmClients", JSON.stringify(clients));
+  };
+
+  window.saveStatus = (id, value) => {
+    const clients = JSON.parse(localStorage.getItem("crmClients")) || [];
+    const idx = clients.findIndex(c => c.id === id);
+    clients[idx].status = value;
+    localStorage.setItem("crmClients", JSON.stringify(clients));
+    render();
+  };
+
+  // populate affiliates
+  const all = JSON.parse(localStorage.getItem("crmClients")) || [];
+  const affiliates = [...new Set(all.map(c => c.affiliate).filter(Boolean))];
+  affiliateFilter.innerHTML += affiliates.map(a => `<option value="${a}">${a}</option>`).join("");
+
+  // listeners
+  [searchInput, statusFilter, affiliateFilter, perPageSelect].forEach(e => {
+    e.addEventListener("input", () => {
+      currentPage = 1;
+      render();
+    });
+  });
+
+  render();
+}
+</script>

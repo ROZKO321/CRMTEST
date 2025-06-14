@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CRM Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #f5f5f5;">
+  <div class="login-box">
+    <h2 data-i18n="login.title">Вход в CRM</h2>
+    <input type="text" id="loginInput" placeholder="Логин" data-i18n-placeholder="login.username" />
+    <input type="password" id="passwordInput" placeholder="Пароль" data-i18n-placeholder="login.password" />
+    <div id="loginError" class="error-msg"></div>
+    <button id="loginBtn" data-i18n="login.button">Войти</button>
+    <select id="languageToggle">
+      <option value="en">EN</option>
+      <option value="ru">RU</option>
+    </select>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/audio.js"></script>
+  <script>
+    const users = JSON.parse(localStorage.getItem("crmUsers")) || [
+      { login: "admin", password: "admin123", role: "admin" },
+      { login: "manager1", password: "manager1", role: "manager" }
+    ];
+
+    document.getElementById("loginBtn").onclick = () => {
+      const login = document.getElementById("loginInput").value.trim();
+      const pass = document.getElementById("passwordInput").value.trim();
+      const errorBox = document.getElementById("loginError");
+
+      const found = users.find(u => u.login === login && u.password === pass);
+      if (!found) {
+        errorBox.textContent = "Неверный логин или пароль";
+        errorBox.classList.add("shake");
+        playSound("error");
+        setTimeout(() => errorBox.classList.remove("shake"), 500);
+        return;
+      }
+
+      localStorage.setItem("crmCurrentUser", JSON.stringify(found));
+      playSound("success");
+      window.location.href = "index.html";
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedLang = localStorage.getItem("crmLang") || "ru";
+      document.getElementById("languageToggle").value = savedLang;
+      loadLanguage(savedLang);
+    });
+  </script>
+  <script src="js/init.js"></script>
+</body>
+</html>

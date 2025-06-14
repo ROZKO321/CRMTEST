@@ -1,0 +1,124 @@
+<section class="settings-panel">
+  <h2>Панель администратора</h2>
+
+  <div class="admin-block">
+    <h3>Добавить клиента вручную</h3>
+    <input id="name" placeholder="Имя" />
+    <input id="surname" placeholder="Фамилия" />
+    <input id="email" placeholder="Email" />
+    <input id="phone" placeholder="Телефон" />
+    <input id="country" placeholder="Страна" />
+    <input id="affiliate" placeholder="Аффилиат" />
+    <select id="assignManager"></select>
+    <button onclick="addClient()">Добавить клиента</button>
+  </div>
+
+  <div class="admin-block">
+    <h3>Импорт / Экспорт</h3>
+    <input type="file" id="csvFile" />
+    <button onclick="importCSV()">Импорт CSV</button>
+    <button onclick="exportCSV()">Экспорт CSV</button>
+  </div>
+
+  <div class="admin-block">
+    <h3>Добавить менеджера</h3>
+    <input id="managerLogin" placeholder="Логин" />
+    <input id="managerPass" placeholder="Пароль" />
+    <button onclick="addManager()">Добавить менеджера</button>
+  </div>
+
+  <div class="admin-block">
+    <h3>Логи</h3>
+    <div id="logsBox" style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"></div>
+  </div>
+</section>
+
+<script>
+function initSettingsPage() {
+  const managers = (JSON.parse(localStorage.getItem("crmUsers")) || []).filter(u => u.role === "manager");
+  const assignSelect = document.getElementById("assignManager");
+  assignSelect.innerHTML = managers.map(m => `<option value="${m.login}">${m.login}</option>`).join("");
+
+  const logs = JSON.parse(localStorage.getItem("crmLogs") || "[]");
+  document.getElementById("logsBox").innerHTML = logs.reverse().map(log => `<div>📅 ${log}</div>`).join("");
+}
+
+function addClient() {
+  const fields = ["name", "surname", "email", "phone", "country", "affiliate"];
+  const values = {};
+  fields.forEach(f => values[f] = document.getElementById(f).value.trim());
+  values.manager = document.getElementById("assignManager").value;
+  values.status = "new";
+  values.id = Date.now();
+  values.reminders = [];
+  values.createdAt = new Date().toISOString();
+
+  const clients = JSON.parse(localStorage.getItem("crmClients") || "[]");
+  clients.push(values);
+  localStorage.setItem("crmClients", JSON.stringify(clients));
+  saveLog(`Добавлен клиент: ${values.name} ${values.surname}`);
+  alert("Клиент добавлен");
+}
+
+function addManager() {
+  const login = document.getElementById("managerLogin").value.trim();
+  const password = document.getElementById("managerPass").value.trim();
+  const users = JSON.parse(localStorage.getItem("crmUsers") || "[]");
+
+  if (users.find(u => u.login === login)) {
+    alert("Такой логин уже существует!");
+    return;
+  }
+
+  users.push({ login, password, role: "manager" });
+  localStorage.setItem("crmUsers", JSON.stringify(users));
+  saveLog(`Добавлен менеджер: ${login}`);
+  alert("Менеджер добавлен");
+}
+
+function saveLog(text) {
+  const logs = JSON.parse(localStorage.getItem("crmLogs") || "[]");
+  logs.push(`${new Date().toLocaleString()} — ${text}`);
+  localStorage.setItem("crmLogs", JSON.stringify(logs));
+}
+
+function importCSV() {
+  const file = document.getElementById("csvFile").files[0];
+  if (!file) return alert("Выберите CSV файл");
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const lines = reader.result.split("\n");
+    const clients = JSON.parse(localStorage.getItem("crmClients") || "[]");
+    lines.forEach(line => {
+      const [name, surname, email, phone, country, affiliate, manager] = line.split(",");
+      if (name && surname) {
+        clients.push({
+          id: Date.now() + Math.random(),
+          name, surname, email, phone, country, affiliate, manager,
+          status: "new",
+          reminders: [],
+          createdAt: new Date().toISOString()
+        });
+      }
+    });
+    localStorage.setItem("crmClients", JSON.stringify(clients));
+    saveLog(`Импортировано клиентов: ${lines.length}`);
+    alert("Импорт завершён");
+  };
+  reader.readAsText(file);
+}
+
+function exportCSV() {
+  const clients = JSON.parse(localStorage.getItem("crmClients") || "[]");
+  const csv = clients.map(c => [
+    c.name, c.surname, c.email, c.phone, c.country, c.affiliate, c.manager
+  ].join(",")).join("\n");
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "clients_export.csv";
+  a.click();
+}
+</script>

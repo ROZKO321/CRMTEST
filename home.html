@@ -1,0 +1,17 @@
+<section class="home-welcome">
+  <h1>Welcome to Coldi CRM</h1>
+  <p class="motivation">Let’s achieve greatness together 💼</p>
+</section>
+
+<script>
+function initHomePage() {
+  const user = JSON.parse(localStorage.getItem("crmCurrentUser"));
+  const welcome = document.querySelector(".home-welcome h1");
+  if (user?.role === "admin") {
+    welcome.textContent += " — Admin";
+  } else if (user?.role === "manager") {
+    welcome.textContent += " — Manager";
+  }
+}
+initHomePage();
+</script>
