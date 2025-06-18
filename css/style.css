@@ -752,3 +752,306 @@ button.save-btn:hover {
   font-size: 12px;
   color: #888;
 }
+.client-body {
+  background: linear-gradient(to bottom right, #e4efff, #ffffff);
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 40px;
+  color: #222;
+}
+
+.client-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.client-card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.client-card h3 {
+  margin-top: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.client-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.client-left,
+.client-right {
+  flex: 1;
+}
+
+.client-info p {
+  margin: 6px 0;
+}
+
+.client-status,
+.client-comment,
+.client-reminder {
+  margin-bottom: 20px;
+}
+
+.client-status select,
+.client-reminder input,
+.client-comment textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.client-comment textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.client-actions {
+  text-align: right;
+}
+
+.client-actions button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.client-actions button:hover {
+  background: #0056b3;
+}
+.btn-generate {
+  background: linear-gradient(135deg, #36d1dc, #5b86e5);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.btn-generate:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(91, 134, 229, 0.4);
+}
+.lead-comment {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #555;
+  font-style: italic;
+}
+/* === СТИЛИ ДЛЯ ВКЛАДКИ ЛИДОВ === */
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.filter-bar input,
+.filter-bar select {
+  padding: 10px 14px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+  min-width: 200px;
+}
+
+.filter-bar input:focus,
+.filter-bar select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+}
+
+.lead-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lead-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.lead-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.lead-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lead-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1a1a1a;
+  text-decoration: underline;
+}
+
+.lead-name:hover {
+  color: #007bff;
+}
+
+.lead-email,
+.lead-phone {
+  font-size: 14px;
+  color: #555;
+}
+
+.lead-comment {
+  font-size: 14px;
+  color: #666;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.lead-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  text-align: right;
+  min-width: 140px;
+}
+
+.lead-status {
+  padding: 4px 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  font-weight: 500;
+  background-color: #f0f0f0;
+  color: #333;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.lead-status[data-status="new"] {
+  background-color: #e6f4ff;
+  color: #007bff;
+}
+
+.lead-status[data-status="in-progress"] {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.lead-status[data-status="closed"] {
+  background-color: #e2e3e5;
+  color: #6c757d;
+}
+
+.lead-affiliate {
+  font-size: 13px;
+  color: #999;
+}
+.content {
+  padding: 40px;
+}
+
+.card {
+  background-color: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.card h2 {
+  margin-bottom: 20px;
+}
+.client-view {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  margin-top: 40px;
+}
+
+.client-left,
+.client-right {
+  flex: 1;
+}
+
+.client-left p {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+.client-right .form-group {
+  margin-bottom: 20px;
+}
+
+.client-right label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+  color: #333;
+}
+
+.client-right select,
+.client-right textarea,
+.client-right input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.client-right textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-actions {
+  text-align: right;
+}
+
+.save-btn {
+  padding: 10px 20px;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background: #0056b3;
+}

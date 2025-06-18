@@ -3,108 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Лиды — Coldi CRM</title>
+  <title>База лидов</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="img/logo.svg" type="image/svg+xml" />
-  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   <div class="sidebar">
-    <div class="logo">
-      <img src="img/logo.svg" alt="Logo" />
-      Coldi CRM
-    </div>
-    <div class="menu">
-      <a href="home.html"><i class="lucide lucide-home"></i> Главная</a>
-      <a href="leads.html" class="active"><i class="lucide lucide-users"></i> Лиды</a>
-      <a href="notifications.html"><i class="lucide lucide-bell"></i> Напоминания</a>
-      <a href="admin.html" id="adminSettings"><i class="lucide lucide-settings"></i> Настройки</a>
-    </div>
+    <div class="logo"><img src="img/logo.svg" alt="Logo" /> Coldi CRM</div>
+    <a href="home.html">Главная</a>
+    <a class="active" href="leads.html">Лиды</a>
+    <a href="notifications.html">Напоминания</a>
+    <a href="admin.html" id="adminMenu" style="display: none;">Настройки</a>
+    <a href="#" onclick="logout()" class="exit-link">Выход</a>
   </div>
 
-  <div class="topbar">
-    <div style="display: flex; align-items: center; gap: 20px;">
-      <div class="bell" onclick="toggleNotifications()">
-        <i class="lucide lucide-bell"></i>
-        <div class="notification-popup" id="notificationPopup">
-          <div class="empty">Пока здесь пусто</div>
-        </div>
+  <div class="main">
+    <div class="topbar">
+      <div id="greeting">Здравствуйте!</div>
+      <div id="notificationIcon" class="notification-icon">
+        <img src="img/bell.svg" alt="🔔" />
+        <div id="notificationBadge" class="notification-badge" style="display: none;">0</div>
       </div>
-      <div class="greeting" id="greetingText">Здравствуйте!</div>
     </div>
-    <button class="logout" onclick="logout()">Выход</button>
+
+    <div class="content">
+      <h2>База лидов</h2>
+
+      <div class="filter-bar">
+        <input type="text" id="search" placeholder="Поиск по имени, email или телефону" />
+        <select id="statusFilter">
+          <option value="">Все статусы</option>
+          <option value="new">Новый</option>
+          <option value="in-progress">В работе</option>
+          <option value="closed">Закрыт</option>
+        </select>
+        <select id="affiliateFilter">
+          <option value="">Все аффилиаты</option>
+          <option value="partnerA">Партнёр A</option>
+          <option value="partnerB">Партнёр B</option>
+        </select>
+        <select id="limitSelect">
+          <option value="10">Показать 10</option>
+          <option value="20">Показать 20</option>
+          <option value="30" selected>Показать 30</option>
+          <option value="50">Показать 50</option>
+          <option value="100">Показать 100</option>
+        </select>
+      </div>
+
+      <div id="leadList" class="lead-list"></div>
+    </div>
   </div>
 
-  <div class="content">
-    <h2>База лидов</h2>
-
-    <!-- Фильтры -->
-    <div class="leads-filters">
-      <input type="text" id="search" placeholder="Поиск по имени, email или телефону" />
-
-      <select id="statusFilter">
-        <option value="">Все статусы</option>
-        <option value="new">Новый</option>
-        <option value="in-progress">В работе</option>
-        <option value="closed">Закрыт</option>
-      </select>
-
-      <select id="affiliateFilter">
-        <option value="">Все аффилиаты</option>
-        <option value="partnerA">partnerA</option>
-        <option value="partnerB">partnerB</option>
-      </select>
-
-      <select id="limitSelect">
-        <option value="10">Показать 10</option>
-        <option value="20">20</option>
-        <option value="30">30</option>
-        <option value="50">50</option>
-        <option value="100">100</option>
-      </select>
-    </div>
-
-    <!-- Лиды -->
-    <div id="leadList" class="lead-list">
-      <!-- Карточки лидов будут здесь -->
-    </div>
-
-    <!-- Пагинация -->
-    <div id="pagination" class="pagination"></div>
-  </div>
-
-  <script>
-    const role = localStorage.getItem("role");
-    const greeting = document.getElementById("greetingText");
-    const adminMenu = document.getElementById("adminSettings");
-
-    if (!role) {
-      window.location.href = "index.html";
-    } else {
-      greeting.textContent = role === "admin" ? "Здравствуйте, администратор!" : "Здравствуйте, менеджер!";
-      adminMenu.style.display = role === "admin" ? "flex" : "none";
-    }
-
-    function logout() {
-      localStorage.removeItem("role");
-      localStorage.removeItem("user");
-      window.location.href = "index.html";
-    }
-
-    function toggleNotifications() {
-      document.getElementById("notificationPopup").classList.toggle("show");
-    }
-
-    lucide.createIcons();
-  </script>
-  <div id="notificationIcon" class="notification-icon">
-  <img src="img/bell.svg" alt="🔔" />
-  <div id="notificationBadge" class="notification-badge" style="display: none;">0</div>
-</div>
-
-<div id="notificationPopup" class="notification-popup" style="display: none;"></div>
-
-<script src="js/reminder.js"></script>
-
+  <div id="notificationPopup" class="notification-popup" style="display: none;"></div>
+  <script src="js/leads.js"></script>
+  <script src="js/reminder.js"></script>
 </body>
 </html>

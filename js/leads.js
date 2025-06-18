@@ -1,3 +1,21 @@
+if (!localStorage.getItem("crmClients")) {
+  const sampleLeads = Array.from({ length: 20 }, (_, i) => ({
+    id: i + 1,
+    firstName: `Имя${i + 1}`,
+    lastName: `Фамилия${i + 1}`,
+    phone: `+38063${Math.floor(1000000 + Math.random() * 8999999)}`,
+    email: `user${i + 1}@example.com`,
+    status: ["new", "in-progress", "closed"][i % 3],
+    affiliate: ["partnerA", "partnerB"][i % 2],
+    manager: i % 2 === 0 ? "manager1" : "manager2",
+    comment: `Комментарий к клиенту #${i + 1}`,
+    reminder: "",
+    country: "Украина"
+  }));
+
+  localStorage.setItem("crmClients", JSON.stringify(sampleLeads));
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("search");
   const statusFilter = document.getElementById("statusFilter");
@@ -9,17 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const role = localStorage.getItem("role") || "manager";
   const currentUser = localStorage.getItem("user") || "manager1";
 
-  // Генерация фейковых лидов
-  const allLeads = Array.from({ length: 123 }, (_, i) => ({
-    id: i + 1,
-    firstName: `Имя${i + 1}`,
-    lastName: `Фамилия${i + 1}`,
-    phone: `+38 (0${Math.floor(Math.random() * 1000000000).toString().padStart(9, "0")})`,
-    email: `user${i + 1}@example.com`,
-    status: ["new", "in-progress", "closed"][i % 3],
-    affiliate: ["partnerA", "partnerB"][i % 2],
-    manager: i % 2 === 0 ? "manager1" : "manager2",
-  }));
+  const allLeads = JSON.parse(localStorage.getItem("crmClients")) || [];
 
   let filteredLeads = [];
   let currentPage = 1;
@@ -101,7 +109,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       right.append(status, affiliate);
 
-      card.append(left, right);
+      const comment = document.createElement("div");
+      comment.className = "lead-comment";
+      comment.textContent = lead.comment ? `💬 ${lead.comment}` : "Комментарий отсутствует";
+
+      card.append(left, right, comment);
       leadList.appendChild(card);
     });
 
@@ -140,6 +152,8 @@ document.addEventListener("DOMContentLoaded", () => {
     renderLeads();
     renderPagination(filteredLeads.length, parseInt(limitSelect.value));
   });
+// Сохраняем всех лидов для client.html
+localStorage.setItem("leads", JSON.stringify(allLeads));
 
   applyFilters();
 });

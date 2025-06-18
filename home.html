@@ -19,6 +19,7 @@
       <a href="leads.html"><i class="lucide lucide-users"></i> Лиды</a>
       <a href="notifications.html"><i class="lucide lucide-bell"></i> Напоминания</a>
       <a href="admin.html" id="adminPanelLink"><i class="lucide lucide-settings"></i> Админ</a>
+      <a href="#" onclick="logout()" class="logout-link">🚪 Выход</a>
     </div>
   </div>
 
@@ -31,7 +32,6 @@
           <p class="empty">Пока здесь пусто...</p>
         </div>
       </div>
-      <button class="logout" onclick="logout()">Выход</button>
     </div>
   </div>
 
@@ -84,6 +84,7 @@
 
     lucide.createIcons();
   </script>
+<!-- Уведомления -->
 <div id="notificationIcon" class="notification-icon">
   <img src="img/bell.svg" alt="🔔" />
   <div id="notificationBadge" class="notification-badge" style="display: none;">0</div>
@@ -92,5 +93,6 @@
 <div id="notificationPopup" class="notification-popup" style="display: none;"></div>
 
 <script src="js/reminder.js"></script>
+
 </body>
 </html>
